@@ -1,0 +1,125 @@
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log opened at 2015-09-28 17:00:55
+project --topLevelPackage br.ufpb.dcx --projectName educservice-javaserverfaces --java 7 --packaging JAR
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log closed at 2015-09-28 17:00:56
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log opened at 2015-09-28 17:00:59
+hint
+jpa setup --provider HIBERNATE --database MYSQL --databaseName educservice --password root --userName root
+entity jpa --class br.ufpb.dcx.model.Usuario
+field string --fieldName nome --notNull
+field string --fieldName apelido --notNull
+field string --fieldName login --notNull
+field string --fieldName senha --notNull
+field string --fieldName senhaDeRecuperacao --notNull
+field boolean --fieldName isAitvo
+entity jpa --class ~.model.Perfil
+field string nome
+focus --class ~.model.Usuario
+field reference --fieldName perfil --type ~.model.Perfil
+web jsf setup --implementation APACHE_MYFACES --library PRIMEFACES --theme CASABLANCA
+web jsf all --package br.ufpb.dcx.jsf
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log closed at 2015-09-28 17:18:33
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log opened at 2015-09-28 21:49:42
+enum type --class ~.model.PerfilEnum
+focus --class ~.model.Usuario
+field enum --fieldName perfil --type ~.model.PerfilEnum
+service all --interfacePackage br.ufpb.dcx.service
+focus --class ~.model.Usuario
+finder list 
+finder add --finderName findUsuariosByLoginEquals
+finder add --finderName findUsuariosByApelidoEquals
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log closed at 2015-09-29 00:03:09
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log opened at 2015-09-29 00:03:20
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log closed at 2015-09-29 00:22:34
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log opened at 2015-09-29 00:22:41
+entity jpa --class Email
+field string --fieldName texto
+field string --fieldName remetente
+service type --interface ~.service.EmailService --entity ~.model.Email
+service type --interface br.ufpb.dcx.service.EmailService --entity ~.model.Email
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log closed at 2015-09-29 01:55:15
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log opened at 2015-09-29 16:09:57
+focus --class ~.model.Usuario
+field string --fieldName email --notNull 
+finder list
+find ad --finderName findUsuariosByEmailEquals
+find ad --finderName findUsuariosByNickNameEquals
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log closed at 2015-09-29 20:55:32
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log opened at 2015-09-30 22:37:25
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log closed at 2015-09-30 23:55:41
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log opened at 2015-10-01 17:23:31
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log closed at 2015-10-01 17:35:48
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log opened at 2015-10-03 00:18:32
+hint
+entity jpa --class ~.model.Questao --abstract true
+field string --fieldName enunciado --lob true
+entity jpa --class ~.model.QuestaoDissertativa --extends ~.model.Questao
+field string --fieldName solucao --lob true
+entity jpa --class ~.model.QuestaoDeMultiplaEscolha --extends ~.model.Questao
+// [failed] field list --fieldName alternativas --type java.util.String
+field number --fieldName alternativaCorreta --type int
+// [failed] field list --fieldName teste --type int
+entity jpa --class ~.model.QuestaoVouF --extends ~.model.Questao
+entity jpa --class ~.model.AlternativaVouF
+field string alternativa --notNull 
+field boolean resposta --notNull 
+focus --class ~.model.QuestaoVouF
+field list --fieldName alternativas --type ~.model.AlternativaVouF --sizeMin 1
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log closed at 2015-10-03 00:38:47
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log opened at 2015-10-03 00:38:56
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log closed at 2015-10-03 00:41:05
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log opened at 2015-10-03 00:41:10
+focus --class ~.model.QuestaoDeMultiplaEscolha
+field other --fieldName alternativas --type string
+// [failed] field list --type String --fieldName alternativas
+// [failed] field list --type string --fieldName alternativas
+// [failed] field list --type String --fieldName alternativas
+// [failed] field list --type java.lang.String --fieldName alternativas
+focus --class ~.model.Questao
+field reference --fieldName professor --type ~.model.Usuario --notNull
+service type --interface ~.service.QuestaoService --entity ~.model.Questao
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log closed at 2015-10-03 01:57:58
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log opened at 2015-10-03 01:58:27
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log closed at 2015-10-03 02:01:35
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log opened at 2015-10-03 02:01:42
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log closed at 2015-10-03 02:33:10
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log opened at 2015-10-03 02:34:38
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log closed at 2015-10-03 02:45:52
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log opened at 2015-10-03 02:45:57
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log closed at 2015-10-03 03:22:14
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log opened at 2015-10-03 15:09:39
+entity jpa --class ~.model.AlternativaDeQuestaoDeMultiplaEscolha
+field string --fieldName descricao --notNull true
+field boolean --fieldName alternativaCorreta
+focus --class ~.model.QuestaoDeMultiplaEscolha
+field list --type ~.model.AlternativaDeQuestaoDeMultiplaEscolha --fieldName alternativas
+service type --interface ~.service.QuestaoDeMultiplaEscolhaService --entity ~.model.QuestaoDeMultiplaEscolha
+service type --interface ~.service.AlternativaDeQuestaoDeMultiplaEscolhaService --entity ~.model.AlternativaDeQuestaoDeMultiplaEscolha
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log closed at 2015-10-04 00:05:11
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log opened at 2015-10-04 00:05:28
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log closed at 2015-10-04 10:34:09
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log opened at 2015-10-04 10:34:17
+service type --interface ~.service.QuestaoDissertativaService --entity ~.model.QuestaoDissertativa
+service type --interface ~.service.QuestaoVouFService --entity ~.model.QuestaoVouF
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log closed at 2015-10-05 17:51:05
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log opened at 2015-10-06 00:32:22
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log closed at 2015-10-06 00:53:58
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log opened at 2015-10-06 02:03:35
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log closed at 2015-10-06 02:05:47
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log opened at 2015-10-06 02:07:17
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log closed at 2015-10-06 03:18:31
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log opened at 2015-10-06 03:19:30
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log closed at 2015-10-06 03:33:53
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log opened at 2015-10-06 03:34:54
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log closed at 2015-10-06 03:40:19
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log opened at 2015-10-06 03:40:37
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log closed at 2015-10-06 03:42:21
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log opened at 2015-10-06 12:45:30
+focus --class ~.model.QuestaoDeMultiplaEscolha
+field reference --fieldName questao --type ~.model.Questao --notNull true
+focus --class ~.model.QuestaoDissertativa
+field reference --fieldName questao --type ~.model.Questao --notNull true
+focus --class ~.model.QuestaoVouF
+field reference --fieldName questao --type ~.model.Questao --notNull true
+focus --class ~.model.Questao
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log opened at 2015-10-06 17:01:14
+service type --interface ~.service.AlternativaDeQuestaoVouFService --entity ~.model.AlternativaVouF
