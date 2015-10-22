@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="../../templates/private/layout.xhtml">
+	<ui:define name="content">
+		<p:panel id="panel">
+			<h1>Exercícios</h1>
+			<p:separator />
+
+			<h:panelGrid>
+				<h3>Pesquisar Exercício</h3>
+
+				<h:form id="exerciciosPesquisaForm">
+					<p:growl id="growlPesquisa" />
+
+					<h:panelGrid>
+						<p:commandButton id="pesquisarCommandButton" value="Pesquisar"
+							actionListener="#{exercicioBean.pesquisar}"
+							update="exerciciosDataTable, growlPesquisa" />
+
+						<p:dataTable id="exerciciosDataTable" style="width: 950px"
+							value="#{exercicioBean.exercicios}" var="exercicio"
+							emptyMessage="Nenhum exercício encontrado!" paginator="true"
+							rows="10" rowsPerPageTemplate="5, 10, 15"
+							paginatorPosition="bottom">
+
+							<f:facet name="header">
+            					Exercícios
+        					</f:facet>
+
+							<p:column headerText="Nome" width="700">
+								<h:outputText value="#{exercicio.nomeFormatado}" />
+							</p:column>
+
+							<p:column headerText="Data de vencimento" width="130">
+								<h:outputText value="#{exercicio.dataDeVencimentoFormatada}" />
+							</p:column>
+
+							<p:column headerText="Editar">
+								<div align="center">
+									<p:commandLink
+										actionListener="#{exercicioBean.editar(exercicio)}"
+										update=":formCadastroExercicio, :formCadastroExercicio:questoesDeExercicioDataTable">
+
+										<p:graphicImage
+											url="https://s3-us-west-2.amazonaws.com/educservicebucket/images/edit.png"
+											width="20" height="20" />
+									</p:commandLink>
+								</div>
+							</p:column>
+						</p:dataTable>
+					</h:panelGrid>
+				</h:form>
+
+				<p:panel id="panelCadastro">
+					<h3>Cadastrar Exercício</h3>
+					<h:form id="formCadastroExercicio">
+						<p:growl id="growlCadastroExercicio" />
+
+						<h:panelGrid>
+							<h:panelGrid columns="2">
+								<h:panelGrid>
+									<p:outputLabel for="nomeDoExercicioInputText" value="Nome" />
+									<p:inputText id="nomeDoExercicioInputText"
+										style="width: 300px;" value="#{exercicioBean.exercicio.nome}"
+										required="true" requiredMessage="Nome é obrigatório"
+										maxlength="255" />
+								</h:panelGrid>
+
+								<h:panelGrid>
+									<p:outputLabel for="dataDeVencimentoDoExercicioCalendar"
+										value="Data de Vencimento" />
+									<p:calendar id="dataDeVencimentoDoExercicioCalendar"
+										value="#{exercicioBean.exercicio.dataDeVencimento}"
+										required="true" pattern="dd/MM/yyyy"
+										requiredMessage="Data de Vencimento é obrigatório" />
+								</h:panelGrid>
+							</h:panelGrid>
+
+							<h4>Questões</h4>
+							<p:commandButton value="Add. Questão" type="button"
+								onclick="modalPesquisaDeQuestoesWidgetVar.show();" />
+
+
+							<p:dataTable id="questoesDeExercicioDataTable"
+								style="width: 850px" value="#{exercicioBean.exercicio.questoes}"
+								var="questao" emptyMessage="Nenhuma questão cadastrada!"
+								paginator="true" rows="5" rowsPerPageTemplate="5"
+								paginatorPosition="bottom">
+
+								<f:facet name="header">
+            					Questões
+        					</f:facet>
+								<p:column headerText="Nome" width="120">
+									<h:outputText value="#{questao.nomeFormatado}" />
+								</p:column>
+
+								<p:column headerText="Enunciado" width="600">
+									<h:outputText value="#{questao.enunciadoFormatado}" />
+								</p:column>
+								
+								<p:column headerText="Remover">
+									<div align="center">
+										<p:commandLink
+											actionListener="#{exercicioBean.removerQuestao(questao)}"
+											process="questoesDeExercicioDataTable"
+											update="questoesDeExercicioDataTable">
+
+											<p:graphicImage
+												url="https://s3-us-west-2.amazonaws.com/educservicebucket/images/remove.png"
+												width="20" height="20" />
+										</p:commandLink>
+									</div>
+								</p:column>
+							</p:dataTable>
+
+							<p:commandButton value="Salvar"
+								actionListener="#{exercicioBean.salvar}" update="@form" />
+						</h:panelGrid>
+					</h:form>
+				</p:panel>
+			</h:panelGrid>
+		</p:panel>
+
+		<p:dialog modal="true" widgetVar="modalPesquisaDeQuestoesWidgetVar">
+			<h1>Questões</h1>
+			<p:separator />
+
+			<h:form>
+				<h:panelGrid>
+					<h3>Pesquisar Questão</h3>
+					<p:growl id="growlPesquisaQuestao" />
+
+					<p:outputLabel for="nomePesquisaQuestaoInputText" value="Nome" />
+					<p:inputText id="nomePesquisaQuestaoInputText"
+						value="#{exercicioBean.nomeQuestaoPesquisa}" />
+
+					<p:commandButton value="Pesquisar"
+						actionListener="#{exercicioBean.pesquisarQuestoes}"
+						update="@form, pesquisaDeQuestoesDataTable" />
+
+					<p:dataTable id="pesquisaDeQuestoesDataTable" style="width: 850px"
+						value="#{exercicioBean.questoesPesquisa}" var="questao"
+						emptyMessage="Nenhuma questão encontrada!" paginator="true"
+						rows="5" rowsPerPageTemplate="5" paginatorPosition="bottom">
+
+						<f:facet name="header">
+            			Questões
+        			</f:facet>
+
+						<p:column headerText="Nome" width="120">
+							<h:outputText value="#{questao.nomeFormatado}" />
+						</p:column>
+
+						<p:column headerText="Enunciado" width="600">
+							<h:outputText value="#{questao.enunciadoFormatado}" />
+						</p:column>
+						<p:column headerText="Adicionar">
+							<div align="center">
+								<p:commandLink
+									actionListener="#{exercicioBean.adicionarQuestao(questao)}"
+									update="@form, :formCadastroExercicio:questoesDeExercicioDataTable"
+									oncomplete="modalPesquisaDeQuestoesWidgetVar.hide();"
+									process="pesquisaDeQuestoesDataTable">
+
+									<p:graphicImage
+										url="https://s3-us-west-2.amazonaws.com/educservicebucket/images/edit.png"
+										width="20" height="20" />
+								</p:commandLink>
+							</div>
+						</p:column>
+					</p:dataTable>
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>
+</html>

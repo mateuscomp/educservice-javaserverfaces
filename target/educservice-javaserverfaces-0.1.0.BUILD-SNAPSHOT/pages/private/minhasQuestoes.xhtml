@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="../../templates/private/layout.xhtml">
+	<ui:define name="content">
+		<p:panel id="panel">
+			<h1>Minhas Questões</h1>
+			<p:separator />
+
+			<h:panelGrid>
+				<h3>Pesquisar</h3>
+
+				<h:form id="minhasQuestoesPesquisaForm">
+					<p:growl id="growlPesquisa" />
+
+					<h:panelGrid>
+						<h:panelGrid>
+							<p:outputLabel for="nomePesquisaInputText" value="Nome" />
+							<p:inputText id="nomePesquisaInputText" style="width: 200px;"
+								value="#{minhasQuestoesBean.nomePesquisa}" />
+						</h:panelGrid>
+
+						<p:commandButton id="pesquisarCommandButton" value="Pesquisar"
+							actionListener="#{minhasQuestoesBean.pesquisar}"
+							update="questoesDataTable, growlPesquisa" />
+
+						<p:dataTable id="questoesDataTable" style="width: 950px"
+							value="#{minhasQuestoesBean.questoes}" var="questao"
+							emptyMessage="Nenhuma questão encontrada!" paginator="true"
+							rows="10" rowsPerPageTemplate="5, 10, 15"
+							paginatorPosition="bottom">
+
+							<f:facet name="header">
+            					Questões
+        					</f:facet>
+
+							<p:column headerText="Id">
+								<h:outputText value="#{questao.id}" />
+							</p:column>
+
+							<p:column headerText="Nome" width="120">
+								<h:outputText value="#{questao.nomeFormatado}" />
+							</p:column>
+
+							<p:column headerText="Enunciado" width="600">
+								<h:outputText value="#{questao.enunciadoFormatado}" />
+							</p:column>
+
+							<p:column headerText="Editar">
+								<div align="center">
+									<p:commandLink
+										actionListener="#{minhasQuestoesBean.editar(questao)}"
+										update="@parent, @this, :tabPanelCadastro">
+
+										<p:graphicImage
+											url="https://s3-us-west-2.amazonaws.com/educservicebucket/images/edit.png"
+											width="20" height="20" />
+									</p:commandLink>
+								</div>
+							</p:column>
+						</p:dataTable>
+					</h:panelGrid>
+				</h:form>
+
+				<h3>Cadastrar</h3>
+				<p:tabView id="tabPanelCadastro"
+					activeIndex="#{minhasQuestoesBean.indexTabView}"
+					widgetVar="tabPanelCadastroWidgetVar">
+					<p:tab id="questaoMultiplaEscolhaTab"
+						title="Questão de Múltipla Escolha">
+						<h3>Questão de Múltipla Escolha</h3>
+
+						<h:form id="formCadastroQME">
+
+							<p:growl id="growlQME" />
+
+							<h:panelGrid cellpadding="3">
+								<p:outputLabel for="nomeDaQuestaoMEInputText" value="Nome" />
+								<p:inputText id="nomeDaQuestaoMEInputText" style="width: 300px;"
+									value="#{minhasQuestoesBean.questaoDeMultiplaEscolha.questao.nome}"
+									required="true" requiredMessage="Nome é obrigatório"
+									maxlength="255" />
+
+								<p:outputLabel value="Enunciado"
+									for="enunciadoQMECadastroInputTextArea" />
+								<p:inputTextarea id="enunciadoQMECadastroInputTextArea"
+									value="#{minhasQuestoesBean.questaoDeMultiplaEscolha.questao.enunciado}"
+									style="width: 900px; height: 50px;" required="true"
+									requiredMessage="Enunciado é obrigatório" />
+
+								<p:fieldset legend="Alternativas">
+									<h:panelGrid cellpadding="3">
+										<p:outputLabel for="alternativaDaQuestaoMEInputText"
+											value="Descr. da Alternativa" />
+										<p:inputTextarea id="alternativaDaQuestaoMEInputText"
+											required="true"
+											requiredMessage="Descr. da Alternativa é obrigatório"
+											style="width: 830px; height: 50px;"
+											value="#{minhasQuestoesBean.alternativaDeQuestaoDeMultiplaEscolha.descricao}" />
+
+										<h:panelGrid columns="2">
+											<p:outputLabel for="alternativaCorretaDaQuestaoMEInputText"
+												value="Alternativa correta: " />
+											<p:selectBooleanCheckbox
+												id="alternativaCorretaDaQuestaoMEInputText"
+												value="#{minhasQuestoesBean.alternativaDeQuestaoDeMultiplaEscolha.alternativaCorreta}" />
+										</h:panelGrid>
+
+										<p:commandButton value="Adicionar alternativa"
+											actionListener="#{minhasQuestoesBean.adicionarAlternativaQME}"
+											process="alternativaDaQuestaoMEInputText, alternativaCorretaDaQuestaoMEInputText"
+											update="alternativaDaQuestaoMEInputText alternativaCorretaDaQuestaoMEInputText, alternativasDataTable, growlQME" />
+
+										<p:dataTable id="alternativasDataTable" style="width: 850px"
+											value="#{minhasQuestoesBean.questaoDeMultiplaEscolha.alternativas}"
+											var="alternativa"
+											emptyMessage="Nenhuma alternativa cadastrada!"
+											paginator="true" rows="5" rowsPerPageTemplate="5"
+											paginatorPosition="bottom">
+
+											<p:column headerText="Id">
+												<h:outputText value="#{alternativa.id}" />
+											</p:column>
+
+											<p:column headerText="Descrição" width="430">
+												<h:outputText value="#{alternativa.descricaoFormatada}" />
+											</p:column>
+
+											<p:column headerText="Resposta correta" width="100">
+												<h:outputText value="#{alternativa.alternativaCorreta}" />
+											</p:column>
+
+											<p:column headerText="Remover">
+												<div align="center">
+													<p:commandLink
+														actionListener="#{minhasQuestoesBean.removerAlternativaMultiplaEscolha(alternativa)}"
+														update="alternativasDataTable"
+														process="alternativasDataTable">
+
+														<p:graphicImage
+															url="https://s3-us-west-2.amazonaws.com/educservicebucket/images/remove.png"
+															width="20" height="20" />
+													</p:commandLink>
+												</div>
+											</p:column>
+										</p:dataTable>
+									</h:panelGrid>
+								</p:fieldset>
+
+								<p:commandButton value="Salvar"
+									actionListener="#{minhasQuestoesBean.salvarQuestaoDeMultiplaEscolha}"
+									process="nomeDaQuestaoMEInputText, enunciadoQMECadastroInputTextArea"
+									update="@form, :minhasQuestoesPesquisaForm" />
+							</h:panelGrid>
+						</h:form>
+					</p:tab>
+
+					<p:tab id="questaoDissertativaTab" title="Questão Dissertativa">
+						<h3>Questão Dissertativa</h3>
+
+						<h:form id="formCadastroQD">
+
+							<p:growl />
+
+							<h:panelGrid cellpadding="3">
+								<p:outputLabel for="nomeDaQuestaoMDInputText" value="Nome" />
+								<p:inputText id="nomeDaQuestaoMDInputText" style="width: 300px;"
+									value="#{minhasQuestoesBean.questaoDissertativa.questao.nome}"
+									required="true" requiredMessage="Nome é obrigatório"
+									maxlength="255" />
+
+								<p:outputLabel value="Enunciado"
+									for="enunciadoQDCadastroInputTextArea" />
+								<p:inputTextarea id="enunciadoQDCadastroInputTextArea"
+									value="#{minhasQuestoesBean.questaoDissertativa.questao.enunciado}"
+									style="width: 900px; height: 50px;" required="true"
+									requiredMessage="Enunciado é obrigatório" />
+
+								<p:outputLabel value="Solucao"
+									for="solucaoQDCadastroInputTextArea" />
+								<p:inputTextarea id="solucaoQDCadastroInputTextArea"
+									value="#{minhasQuestoesBean.questaoDissertativa.solucao}"
+									style="width: 900px; height: 50px;" required="true"
+									requiredMessage="Solucao é obrigatório" />
+
+								<p:commandButton value="Salvar"
+									actionListener="#{minhasQuestoesBean.salvarQuestaoDissertativa}"
+									update="@form, :minhasQuestoesPesquisaForm" />
+
+							</h:panelGrid>
+						</h:form>
+					</p:tab>
+
+					<p:tab id="questaoVFTab" title="Questão de Verdadeiro ou Falso">
+						<h3>Questão de Verdadeiro ou Falso</h3>
+
+						<h:form id="formCadastroQVF">
+
+							<p:growl id="growlQVF" />
+
+							<h:panelGrid cellpadding="3">
+								<p:outputLabel for="nomeDaQuestaoVFInputText" value="Nome" />
+								<p:inputText id="nomeDaQuestaoVFInputText" style="width: 300px;"
+									value="#{minhasQuestoesBean.questaoVerdadeiroOuFalso.questao.nome}"
+									required="true" requiredMessage="Nome é obrigatório"
+									maxlength="255" />
+
+								<p:outputLabel value="Enunciado"
+									for="enunciadoVFCadastroInputTextArea" />
+								<p:inputTextarea id="enunciadoVFCadastroInputTextArea"
+									value="#{minhasQuestoesBean.questaoVerdadeiroOuFalso.questao.enunciado}"
+									style="width: 900px; height: 50px;" required="true"
+									requiredMessage="Enunciado é obrigatório" />
+
+								<p:fieldset legend="Alternativas">
+									<h:panelGrid cellpadding="3">
+										<p:outputLabel for="alternativaVFInputText"
+											value="Descr. da Alternativa" />
+										<p:inputTextarea id="alternativaVFInputText" required="true"
+											requiredMessage="Descr. da Alternativa é obrigatório"
+											style="width: 830px; height: 50px;"
+											value="#{minhasQuestoesBean.alternativaVerdadeiroOuFalso.alternativa}" />
+
+										<h:panelGrid columns="2">
+											<p:outputLabel for="alternativaCorretaDaQuestaoVFInputText"
+												value="Resposta correta: " />
+											<p:selectBooleanButton
+												id="alternativaCorretaDaQuestaoVFInputText"
+												value="#{minhasQuestoesBean.alternativaVerdadeiroOuFalso.resposta}"
+												onLabel="Verdadeiro" offLabel="Falso" onIcon="ui-icon-check"
+												offIcon="ui-icon-close" />
+										</h:panelGrid>
+
+										<p:commandButton value="Adicionar alternativa"
+											actionListener="#{minhasQuestoesBean.adicionarAlternativaQVF}"
+											process="alternativaVFInputText, alternativaCorretaDaQuestaoVFInputText"
+											update="alternativaVFInputText, alternativaCorretaDaQuestaoVFInputText, alternativasVFDataTable, growlQVF" />
+
+										<p:dataTable id="alternativasVFDataTable" style="width: 830px"
+											value="#{minhasQuestoesBean.questaoVerdadeiroOuFalso.alternativas}"
+											var="alternativaVF"
+											emptyMessage="Nenhuma alternativa cadastrada!"
+											paginator="true" rows="5" rowsPerPageTemplate="5"
+											paginatorPosition="bottom">
+
+											<p:column headerText="Id">
+												<h:outputText value="#{alternativaVF.id}" />
+											</p:column>
+
+											<p:column headerText="Descrição" width="430">
+												<h:outputText value="#{alternativaVF.alternativaFormatada}" />
+											</p:column>
+
+											<p:column headerText="Resposta correta" width="100">
+												<h:outputText value="#{alternativaVF.resposta}" />
+											</p:column>
+
+											<p:column headerText="Remover" width="100">
+												<p:commandLink
+													actionListener="#{minhasQuestoesBean.removerAlternativaVF(alternativaVF)}"
+													update="alternativasVFDataTable"
+													process="alternativasVFDataTable">
+
+													<p:graphicImage
+														url="https://s3-us-west-2.amazonaws.com/educservicebucket/images/remove.png"
+														width="20" height="20" />
+												</p:commandLink>
+											</p:column>
+										</p:dataTable>
+									</h:panelGrid>
+								</p:fieldset>
+
+								<p:commandButton value="Salvar"
+									actionListener="#{minhasQuestoesBean.salvarQuestaoVouF}"
+									process="nomeDaQuestaoVFInputText, enunciadoVFCadastroInputTextArea"
+									update="@form, :minhasQuestoesPesquisaForm" />
+							</h:panelGrid>
+						</h:form>
+					</p:tab>
+				</p:tabView>
+			</h:panelGrid>
+		</p:panel>
+	</ui:define>
+</ui:composition>
+</html>

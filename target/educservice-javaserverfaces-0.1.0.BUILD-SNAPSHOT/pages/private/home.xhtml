@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="../../templates/private/layout.xhtml">
+	<ui:define name="content">
+		<p:panel id="panel">
+			<h:form>
+				<h:panelGrid>
+					<h1>Bem vindo ao EducService!</h1>
+
+					<h2>Nesse sistema, um professor será capaz de gerenciar
+						questões de diversos tipos, exercícios e turmas. Assim, será
+						possível fornecer um feedback rápido para os alunos que
+						apresentarem dificuldades na resolução das atividades.</h2>
+				</h:panelGrid>
+
+				<div align="center">
+					<h:panelGrid columns="3">
+						<p:graphicImage
+							url="https://s3-us-west-2.amazonaws.com/educservicebucket/images/teacher.png"
+							width="250" height="250" />
+
+						<p:graphicImage
+							url="https://s3-us-west-2.amazonaws.com/educservicebucket/images/student_white.png"
+							width="250" height="250" />
+
+						<p:graphicImage
+							url="https://s3-us-west-2.amazonaws.com/educservicebucket/images/group.png"
+							width="250" height="250" />
+
+						<p:graphicImage
+							url="https://s3-us-west-2.amazonaws.com/educservicebucket/images/exercise.png"
+							width="250" height="250" />
+
+						<p:graphicImage
+							url="https://s3-us-west-2.amazonaws.com/educservicebucket/images/brain.png"
+							width="250" height="250" />
+
+						<p:graphicImage
+							url="https://s3-us-west-2.amazonaws.com/educservicebucket/images/email.png"
+							width="250" height="250" />
+					</h:panelGrid>
+				</div>
+			</h:form>
+		</p:panel>
+	</ui:define>
+</ui:composition>
+</html>
