@@ -3,7 +3,10 @@ package br.ufpb.dcx.service;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 import br.ufpb.dcx.model.Exercicio;
 import br.ufpb.dcx.model.Questao;
@@ -12,6 +15,9 @@ import br.ufpb.dcx.model.Usuario;
 public class ExercicioServiceImpl implements ExercicioService, Serializable {
 
 	private static final long serialVersionUID = 1L;
+	
+	@Autowired
+	private QuestaoService questaoService;
 
 	@Override
 	public List<Exercicio> pesquisarExerciciosComQuestoesDeProfessor(
@@ -23,10 +29,10 @@ public class ExercicioServiceImpl implements ExercicioService, Serializable {
 	@Override
 	public void salvar(Exercicio exercicio) throws EducServiceException {
 		validarNaoExistenciaDeDuplicidadeDeQuestao(exercicio.getQuestoes());
-		
 		if(exercicio.getQuestoes() == null ||exercicio.getQuestoes().isEmpty()){
 			throw new EducServiceException("Um exercício deve conter pelo menos uma questão");
 		}
+		atualizarVerificarExistenciaDasQuestoes(exercicio);
 
 		Date dataDeVencimento = exercicio.getDataDeVencimento();
 		Calendar calendarComDataDeVencimento = Calendar.getInstance();
@@ -41,6 +47,17 @@ public class ExercicioServiceImpl implements ExercicioService, Serializable {
 		} else {
 			this.updateExercicio(exercicio);
 		}
+	}
+
+	private void atualizarVerificarExistenciaDasQuestoes(Exercicio exercicio) {
+		List<Questao> questoesDoExercicio = exercicio.getQuestoes();
+		List<Questao> questoesPesquisadas = new LinkedList<Questao>();
+		
+		for(Questao questao : questoesDoExercicio){
+			Questao questaoPesquisada = questaoService.findQuestao(questao.getId());
+			questoesPesquisadas.add(questaoPesquisada);
+		}
+		exercicio.setQuestoes(questoesPesquisadas);
 	}
 
 	private void validarNaoExistenciaDeDuplicidadeDeQuestao(

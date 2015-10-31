@@ -196,7 +196,6 @@ public class MinhasQuestoesBean implements Serializable {
 
 			EducServiceJsfUtil
 					.lancarMensagemInformativa("Questão de Múltipla Escolha salva com sucesso!");
-			this.pesquisar();
 		} catch (QuestaoException e) {
 			EducServiceJsfUtil.lancarMensagemDeErro(e.getMessage());
 		}
@@ -215,7 +214,6 @@ public class MinhasQuestoesBean implements Serializable {
 
 		EducServiceJsfUtil
 				.lancarMensagemInformativa("Questão Dissertativa salva com sucesso!");
-		this.pesquisar();
 	}
 
 	public void salvarQuestaoVouF() {
@@ -231,7 +229,6 @@ public class MinhasQuestoesBean implements Serializable {
 
 			EducServiceJsfUtil
 					.lancarMensagemInformativa("Questão de Verdadeiro ou Falso salva com sucesso!");
-			this.pesquisar();
 		} catch (QuestaoException e) {
 			EducServiceJsfUtil.lancarMensagemDeErro(e.getMessage());
 		}
