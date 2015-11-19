@@ -37,6 +37,11 @@ public class QuestaoDeMultiplaEscolha implements Serializable {
 	@NotNull
 	@ManyToOne
 	private Questao questao;
+	
+	
+	public List<AlternativaDeQuestaoDeMultiplaEscolha> getAlternativas(){
+		return this.alternativas;
+	}
 
 	public static QuestaoDeMultiplaEscolha findQuestaoDeMultiplaEscolhaByIdQuestao(
 			Long idQuestao) {

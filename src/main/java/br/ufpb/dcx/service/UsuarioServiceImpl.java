@@ -7,13 +7,11 @@ import br.ufpb.dcx.model.Usuario;
 
 public class UsuarioServiceImpl implements UsuarioService, Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	@Override
 	public void salvar(Usuario usuario) throws EducServiceException {
+		
 		Usuario usuarioComMesmoEmailOuMesmoNickName = Usuario
 				.findUsuarioByNickNameOrEmailEquals(usuario.getNickName()
 						.toLowerCase(), usuario.getEmail().toLowerCase());
@@ -31,10 +29,15 @@ public class UsuarioServiceImpl implements UsuarioService, Serializable {
 			}
 		}
 
+		EducServiceException exception = null;
 		if (usuario.getId() == null) {
 			this.gerarSenhaDeRecuperacao(usuario);
-			SenderMail senderMail = new SenderMail();
-			senderMail.enviarEmailComSenhaGerada(usuario);
+			try{
+				SenderMail senderMail = new SenderMail();
+				senderMail.enviarEmailComSenhaGerada(usuario);
+			} catch(EducServiceException e){
+				exception  = e;
+			}
 		}
 
 		usuario.setNickName(usuario.getNickName().toLowerCase());
@@ -44,6 +47,10 @@ public class UsuarioServiceImpl implements UsuarioService, Serializable {
 		usuario.setSenhaDeRecuperacao(usuario.getSenhaDeRecuperacao()
 				.toLowerCase());
 		this.saveUsuario(usuario);
+		
+		if(exception != null){
+			throw exception;
+		}
 	}
 
 	private void gerarSenhaDeRecuperacao(Usuario usuario) {

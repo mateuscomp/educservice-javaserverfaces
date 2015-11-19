@@ -137,3 +137,39 @@ finder list --class ~.model.Exercicio
 // Spring Roo 1.3.1.RELEASE [rev f4f5256] log opened at 2015-10-21 23:55:30
 // Spring Roo 1.3.1.RELEASE [rev f4f5256] log closed at 2015-10-22 00:40:00
 // Spring Roo 1.3.1.RELEASE [rev f4f5256] log opened at 2015-10-31 10:13:48
+focus --class ~.model.RespostaDeExercicio
+field reference --fieldName questao --type ~.model.Questao
+entity jpa --class ~.model.RespostaDeQuestao
+field reference --fieldName questao --type ~.model.Questao --notNull 
+focus --class ~.model.Usuario
+focus --class ~.model.RespostaDeExercicio
+field reference --fieldName aluno --type ~.model.Usuario --notNull
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log closed at 2015-11-03 19:42:33
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log opened at 2015-11-07 17:30:09
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log closed at 2015-11-07 18:50:20
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log opened at 2015-11-17 20:16:38
+focus --class ~.model.RespostaDeExercicio
+field reference --fieldName exercicio --type ~.model.Exercicio --notNull 
+entity jpa --class ~.model.RespostaDeQuestaoDeUmExercicio
+focus --class ~.model.RespostaDeExercicio
+focus --class ~.model.RespostaDeQuestaoDeUmExercicio
+field reference --fieldName respostaDeExercicio --type ~.model.RespostaDeExercicio --notNull 
+field reference --fieldName questao --type ~.model.Questao --notNull 
+entity jpa --class ~.model.RespostaDeQuestaoDeMultiplaEscolha
+field reference --fieldName respostaDeQuestaoDeUmExercicio --type ~.model.RespostaDeQuestaoDeUmExercicio
+field number --fieldName indiceDaAlternativaCorreta --type java.lang.Integer --notNull 
+entity jpa --class ~.model.RespostaDeQuestaoDissertativa
+field string --fieldName resposta --notNull
+entity jpa --class ~.model.RespostaDeQuestaoDeVerdadeiroOuFalso
+field list --fieldName respostasDeAlternativas --type ~.model.RespostaDeAlternativaVouF
+focus --class ~.model.RespostaDeAlternativaVouF
+field reference --fieldName alternativaVouF --type ~.model.AlternativaVouF --notNull 
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log closed at 2015-11-18 12:46:16
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log opened at 2015-11-18 17:04:05
+hint
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log closed at 2015-11-18 17:13:32
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log opened at 2015-11-18 17:13:42
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log closed at 2015-11-18 17:49:36
+// Spring Roo 1.3.1.RELEASE [rev f4f5256] log opened at 2015-11-18 20:45:44
+service type --entity ~.model.RespostaDeExercicio --interface ~.service.RespostaDeExercicio
+service type --entity ~.model.RespostaDeQuestaoDeUmExercicio --interface ~.service.RespostaDeQuestaoDeUmExercicioService

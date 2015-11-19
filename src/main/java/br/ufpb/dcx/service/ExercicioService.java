@@ -13,4 +13,7 @@ public interface ExercicioService {
 	List<Exercicio> pesquisarExerciciosComQuestoesDeProfessor(Usuario profesor);
 
 	void salvar(Exercicio exercicio) throws EducServiceException;
+
+	List<Exercicio> pesquisarExerciciosPorNomeOuEmailDeProfessor(
+			String apelidoDoProfessorPesquisa, String emailDoProfessorPesquisa);
 }

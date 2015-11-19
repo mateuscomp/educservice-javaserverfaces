@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotNull;
@@ -52,7 +53,7 @@ public class Usuario implements Serializable {
 
 	/**
      */
-	@Enumerated
+	@Enumerated(EnumType.STRING)
 	@NotNull
 	private PerfilEnum perfil;
 

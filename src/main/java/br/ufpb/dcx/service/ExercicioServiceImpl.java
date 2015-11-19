@@ -2,7 +2,6 @@ package br.ufpb.dcx.service;
 
 import java.io.Serializable;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -53,20 +52,20 @@ public class ExercicioServiceImpl implements ExercicioService, Serializable {
 
 		calendarComDataDeVencimento.setTime(exercicio.getDataDeVencimento());
 		int anoDoExercicio = calendarComDataDeVencimento.get(Calendar.YEAR);
-		int mesDoExercicio= calendarComDataDeVencimento.get(Calendar.MONTH);
+		int mesDoExercicio = calendarComDataDeVencimento.get(Calendar.MONTH);
 		int dataDoExercicio = calendarComDataDeVencimento.get(Calendar.DATE);
 
 		if (anoAtual == anoDoExercicio) {
-			if (mesAtual == mesDoExercicio){
+			if (mesAtual == mesDoExercicio) {
 				if (dataAtual > dataDoExercicio) {
 					throw new EducServiceException(
 							"Data de vencimento não pode ser antes da data atual");
 				}
-			} else if (mesAtual > mesDoExercicio){
+			} else if (mesAtual > mesDoExercicio) {
 				throw new EducServiceException(
 						"Data de vencimento não pode ser antes da data atual");
 			}
-		} else if (anoAtual > anoDoExercicio){
+		} else if (anoAtual > anoDoExercicio) {
 			throw new EducServiceException(
 					"Data de vencimento não pode ser antes da data atual");
 		}
@@ -101,5 +100,12 @@ public class ExercicioServiceImpl implements ExercicioService, Serializable {
 				}
 			}
 		}
+	}
+
+	@Override
+	public List<Exercicio> pesquisarExerciciosPorNomeOuEmailDeProfessor(
+			String apelidoDoProfessorPesquisa, String emailDoProfessorPesquisa) {
+
+		return Exercicio.findExerciciosByTeachersNameOrEmail(apelidoDoProfessorPesquisa, emailDoProfessorPesquisa);
 	}
 }

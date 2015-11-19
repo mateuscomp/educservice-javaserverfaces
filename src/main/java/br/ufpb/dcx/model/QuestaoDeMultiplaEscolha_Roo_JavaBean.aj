@@ -10,10 +10,6 @@ import java.util.List;
 
 privileged aspect QuestaoDeMultiplaEscolha_Roo_JavaBean {
     
-    public List<AlternativaDeQuestaoDeMultiplaEscolha> QuestaoDeMultiplaEscolha.getAlternativas() {
-        return this.alternativas;
-    }
-    
     public void QuestaoDeMultiplaEscolha.setAlternativas(List<AlternativaDeQuestaoDeMultiplaEscolha> alternativas) {
         this.alternativas = alternativas;
     }
