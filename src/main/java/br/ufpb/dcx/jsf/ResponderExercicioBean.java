@@ -24,6 +24,7 @@ import br.ufpb.dcx.model.RespostaDeQuestaoDeMultiplaEscolha;
 import br.ufpb.dcx.model.RespostaDeQuestaoDeUmExercicio;
 import br.ufpb.dcx.model.RespostaDeQuestaoDeVouF;
 import br.ufpb.dcx.model.RespostaDeQuestaoDissertativa;
+import br.ufpb.dcx.model.StatusRespostaDeExercicioEnum;
 import br.ufpb.dcx.model.Usuario;
 import br.ufpb.dcx.service.ExercicioService;
 import br.ufpb.dcx.service.QuestaoDeMultiplaEscolhaService;
@@ -98,14 +99,21 @@ public class ResponderExercicioBean implements Serializable {
 					.lancarMensagemDeAlerta("Nenhum exercício encontrado!");
 		}
 	}
+	
+	private void inicializarRespostaDeQuestao() {
+		this.respostaDeQuestao = new RespostaDeQuestaoDeUmExercicio();
+		this.respostaDeQuestao.setRespostaDeExercicio(respostaDeExercicio);
+		this.respostaDeQuestao.setQuestao(questao);
+
+		this.respostaDeQuestaoDeUmExercicioService
+				.saveRespostaDeQuestaoDeUmExercicio(respostaDeQuestao);
+	}
 
 	public void responderQuestaoDeMultiplaEscolha() {
-
 		boolean temAlternativaCooreta = false;
 		try {
 			for (int i = 0; i < questaoDeMultiplaEscolha.getAlternativas()
 					.size(); i++) {
-
 				if (questaoDeMultiplaEscolha
 						.getAlternativas()
 						.get(i)
@@ -120,8 +128,12 @@ public class ResponderExercicioBean implements Serializable {
 			}
 			if (temAlternativaCooreta) {
 				this.inicializarRespostaDeQuestao();
-				this.respostaDeQuestaoDeMultiplaEscolhaService
-						.saveRespostaDeQuestaoDeMultiplaEscolha(respostaDeQuestaoDeMultiplaEscolha);
+				
+				this.respostaDeQuestaoDeMultiplaEscolha.setRespostaDeQuestaoDeUmExercicio(this.respostaDeQuestao);
+				this.respostaDeQuestaoDeMultiplaEscolhaService.saveRespostaDeQuestaoDeMultiplaEscolha(respostaDeQuestaoDeMultiplaEscolha);
+
+				EducServiceJsfUtil
+						.lancarMensagemInformativa("Questão de múltipla escolha respondida com sucesso!");
 			}
 		} catch (Exception e) {
 			EducServiceJsfUtil
@@ -131,11 +143,12 @@ public class ResponderExercicioBean implements Serializable {
 
 	public void responderQuestaoDissertativa() {
 		this.inicializarRespostaDeQuestao();
-		this.respostaDeQuestaoDissertativa
-				.setResposta(solucaoDeQuestaoDissertativa);
+		this.respostaDeQuestaoDissertativa.setRespostaDeQuestaoDeUmExercicio(this.respostaDeQuestao);
+		this.respostaDeQuestaoDissertativa.setResposta(solucaoDeQuestaoDissertativa);
+		this.respostaDeQuestaoDissertativaService.saveRespostaDeQuestaoDissertativa(this.respostaDeQuestaoDissertativa);
 
-		this.respostaDeQuestaoDissertativaService
-				.saveRespostaDeQuestaoDissertativa(this.respostaDeQuestaoDissertativa);
+		EducServiceJsfUtil
+				.lancarMensagemInformativa("Questão dissertativa respondida com sucesso!");
 	}
 
 	public void responderQuestaoDeVouF() {
@@ -156,41 +169,57 @@ public class ResponderExercicioBean implements Serializable {
 			respostas.add(respostaDeAlternativaVF);
 		}
 		this.respostaDeQuestaoDeVouF.setRespostasDeAlternativas(respostas);
-		this.respostaDeQuestaoDeVouFService
-				.salvarRespostaDeQuestaoDeVouF(respostaDeQuestaoDeVouF);
-	}
+		this.respostaDeQuestaoDeVouF.setRespostaDeQuestaoDeUmExercicio(this.respostaDeQuestao);
+		this.respostaDeQuestaoDeVouFService.salvarRespostaDeQuestaoDeVouF(respostaDeQuestaoDeVouF);
 
-	private void inicializarRespostaDeQuestao() {
-		this.respostaDeQuestao = new RespostaDeQuestaoDeUmExercicio();
-		this.respostaDeQuestao.setRespostaDeExercicio(respostaDeExercicio);
-		this.respostaDeQuestao.setQuestao(questao);
-
-		this.respostaDeQuestaoDeUmExercicioService
-				.saveRespostaDeQuestaoDeUmExercicio(respostaDeQuestao);
+		EducServiceJsfUtil
+				.lancarMensagemInformativa("Questão de V ou F respondida com sucesso!");
 	}
 
 	public void proximaQuestao() {
 		this.alternativaDeQuestaoDeMultiplaEscolha = null;
 		this.solucaoDeQuestaoDissertativa = null;
 		this.respostasAlternativasVouFSelecionadas = null;
-		
+
 		this.indiceDeQuestao++;
 		Questao proximaQuestao = exercicio.getQuestoes().get(indiceDeQuestao);
-		if (proximaQuestao != null) {
-			questao = proximaQuestao;
-			this.selecionarQuestao(questao);
-		} else {
-			this.questaoDeMultiplaEscolha = null;
-			this.respostaDeQuestaoDeMultiplaEscolha = null;
-			
-			this.questaoDissertativa = null;
-			this.respostaDeQuestaoDissertativa = null;
+		questao = proximaQuestao;
+		this.selecionarQuestao(questao);
+	}
 
-			this.questaoVouF = null;
-			this.respostaDeQuestaoDeVouF = null;
-			
-			EducServiceJsfUtil.lancarMensagemDeErro("Exercício não possui a próxima questão. Questão atual é a última da lista!");
-		}
+	public void finalizarResposta() {
+		this.respostaDeExercicio
+				.setStatus(StatusRespostaDeExercicioEnum.FINALIZADO);
+		this.respostaDeExercicioService
+				.updateRespostaDeExercicio(respostaDeExercicio);
+
+		EducServiceJsfUtil
+				.lancarMensagemInformativa("Exercício respondido com sucesso!");
+
+		iniciar();
+	}
+
+	private void iniciar() {
+		this.exercicio = null;
+		this.indiceDeQuestao = 0;
+
+		this.questao = new Questao();
+		this.questaoDissertativa = null;
+		this.questaoDeMultiplaEscolha = null;
+		this.questaoVouF = null;
+
+		this.alternativaDeQuestaoDeMultiplaEscolha = null;
+		this.solucaoDeQuestaoDissertativa = null;
+
+		this.respostaDeExercicio = null;
+		this.respostaDeQuestao = null;
+		this.respostasDeQuestoes = null;
+
+		this.respostaDeQuestaoDeMultiplaEscolha = null;
+		this.respostaDeQuestaoDissertativa = null;
+		this.respostaDeQuestaoDeVouF = null;
+
+		this.respostasAlternativasVouFSelecionadas = null;
 	}
 
 	public void responder(Exercicio exercicio) {
@@ -208,8 +237,13 @@ public class ResponderExercicioBean implements Serializable {
 		this.respostaDeExercicio = new RespostaDeExercicio();
 		this.respostaDeExercicio.setAluno(aluno);
 		this.respostaDeExercicio.setExercicio(exercicio);
+		this.respostaDeExercicio
+				.setStatus(StatusRespostaDeExercicioEnum.INICIADO);
 		this.respostaDeExercicioService
 				.saveRespostaDeExercicio(this.respostaDeExercicio);
+
+		EducServiceJsfUtil
+				.lancarMensagemInformativa("Tentativa de responder exercício iniciada!");
 
 	}
 
@@ -226,14 +260,12 @@ public class ResponderExercicioBean implements Serializable {
 			this.respostaDeQuestaoDeVouF = null;
 
 			this.respostaDeQuestaoDeMultiplaEscolha = new RespostaDeQuestaoDeMultiplaEscolha();
-			this.respostaDeQuestaoDeMultiplaEscolha
-					.setRespostaDeQuestaoDeUmExercicio(this.respostaDeQuestao);
+			this.respostaDeQuestaoDeMultiplaEscolha.setRespostaDeQuestaoDeUmExercicio(this.respostaDeQuestao);
 
 			return;
 		}
 
-		QuestaoDissertativa questaoDEdicao = this.questaoDissertativaService
-				.pesquisarPorIdDeQuestao(questao);
+		QuestaoDissertativa questaoDEdicao = this.questaoDissertativaService.pesquisarPorIdDeQuestao(questao);
 		if (questaoDEdicao != null) {
 			this.questaoDissertativa = questaoDEdicao;
 
@@ -244,14 +276,12 @@ public class ResponderExercicioBean implements Serializable {
 			this.respostaDeQuestaoDeVouF = null;
 
 			this.respostaDeQuestaoDissertativa = new RespostaDeQuestaoDissertativa();
-			this.respostaDeQuestaoDissertativa
-					.setRespostaDeQuestaoDeUmExercicio(this.respostaDeQuestao);
+			this.respostaDeQuestaoDissertativa.setRespostaDeQuestaoDeUmExercicio(this.respostaDeQuestao);
 
 			return;
 		}
 
-		QuestaoVouF questaoVFEdicao = this.questaoVouFService
-				.pesquisarPorIdDeQuestao(questao);
+		QuestaoVouF questaoVFEdicao = this.questaoVouFService.pesquisarPorIdDeQuestao(questao);
 		if (questaoVFEdicao != null) {
 			this.questaoVouF = questaoVFEdicao;
 
@@ -262,16 +292,18 @@ public class ResponderExercicioBean implements Serializable {
 			this.respostaDeQuestaoDissertativa = null;
 
 			this.respostaDeQuestaoDeVouF = new RespostaDeQuestaoDeVouF();
-			this.respostaDeQuestaoDeVouF
-					.setRespostaDeQuestaoDeUmExercicio(this.respostaDeQuestao);
+			this.respostaDeQuestaoDeVouF.setRespostaDeQuestaoDeUmExercicio(this.respostaDeQuestao);
 		}
 	}
-	
-	public boolean getRenderizarBotaoProximo(){
-		if(exercicio != null && exercicio.getQuestoes() != null && exercicio.getQuestoes().size() > indiceDeQuestao + 1){
-			return true;
-		}
-		return false;
+
+	public boolean getRenderizarBotaoProximo() {
+		return exercicio != null && exercicio.getQuestoes() != null
+				&& exercicio.getQuestoes().size() > indiceDeQuestao + 1;
+	}
+
+	public boolean getRenderizarBotaoFinalizar() {
+		return exercicio != null && exercicio.getQuestoes() != null
+				&& exercicio.getQuestoes().size() <= indiceDeQuestao + 1;
 	}
 
 	public String getApelidoDoProfessorPesquisa() {

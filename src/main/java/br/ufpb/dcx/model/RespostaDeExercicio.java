@@ -1,6 +1,8 @@
 package br.ufpb.dcx.model;
 import java.io.Serializable;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
@@ -29,4 +31,8 @@ public class RespostaDeExercicio implements Serializable {
     @NotNull
     @ManyToOne
     private Exercicio exercicio;
+    
+    @Enumerated(EnumType.STRING)
+	@NotNull
+	private StatusRespostaDeExercicioEnum status;
 }

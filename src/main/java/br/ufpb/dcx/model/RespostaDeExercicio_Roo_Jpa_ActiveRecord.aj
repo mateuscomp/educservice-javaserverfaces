@@ -14,7 +14,7 @@ privileged aspect RespostaDeExercicio_Roo_Jpa_ActiveRecord {
     @PersistenceContext
     transient EntityManager RespostaDeExercicio.entityManager;
     
-    public static final List<String> RespostaDeExercicio.fieldNames4OrderClauseFilter = java.util.Arrays.asList("serialVersionUID", "aluno", "exercicio");
+    public static final List<String> RespostaDeExercicio.fieldNames4OrderClauseFilter = java.util.Arrays.asList("serialVersionUID", "aluno", "exercicio", "status");
     
     public static final EntityManager RespostaDeExercicio.entityManager() {
         EntityManager em = new RespostaDeExercicio().entityManager;

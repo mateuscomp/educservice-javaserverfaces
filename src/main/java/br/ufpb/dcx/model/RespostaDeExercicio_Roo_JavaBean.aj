@@ -5,6 +5,7 @@ package br.ufpb.dcx.model;
 
 import br.ufpb.dcx.model.Exercicio;
 import br.ufpb.dcx.model.RespostaDeExercicio;
+import br.ufpb.dcx.model.StatusRespostaDeExercicioEnum;
 import br.ufpb.dcx.model.Usuario;
 
 privileged aspect RespostaDeExercicio_Roo_JavaBean {
@@ -23,6 +24,14 @@ privileged aspect RespostaDeExercicio_Roo_JavaBean {
     
     public void RespostaDeExercicio.setExercicio(Exercicio exercicio) {
         this.exercicio = exercicio;
+    }
+    
+    public StatusRespostaDeExercicioEnum RespostaDeExercicio.getStatus() {
+        return this.status;
+    }
+    
+    public void RespostaDeExercicio.setStatus(StatusRespostaDeExercicioEnum status) {
+        this.status = status;
     }
     
 }

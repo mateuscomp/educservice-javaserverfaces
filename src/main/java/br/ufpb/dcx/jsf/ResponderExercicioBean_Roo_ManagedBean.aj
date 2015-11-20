@@ -7,6 +7,7 @@ import br.ufpb.dcx.jsf.ResponderExercicioBean;
 import br.ufpb.dcx.jsf.util.MessageFactory;
 import br.ufpb.dcx.model.Exercicio;
 import br.ufpb.dcx.model.RespostaDeExercicio;
+import br.ufpb.dcx.model.StatusRespostaDeExercicioEnum;
 import br.ufpb.dcx.model.Usuario;
 import br.ufpb.dcx.service.UsuarioService;
 import java.util.ArrayList;
@@ -128,6 +129,16 @@ privileged aspect ResponderExercicioBean_Roo_ManagedBean {
             String exercicioStr = String.valueOf(exercicio.getNome() +  " "  + exercicio.getDataDeVencimento());
             if (exercicioStr.toLowerCase().startsWith(query.toLowerCase())) {
                 suggestions.add(exercicio);
+            }
+        }
+        return suggestions;
+    }
+    
+    public List<StatusRespostaDeExercicioEnum> ResponderExercicioBean.completeStatus(String query) {
+        List<StatusRespostaDeExercicioEnum> suggestions = new ArrayList<StatusRespostaDeExercicioEnum>();
+        for (StatusRespostaDeExercicioEnum statusRespostaDeExercicioEnum : StatusRespostaDeExercicioEnum.values()) {
+            if (statusRespostaDeExercicioEnum.name().toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(statusRespostaDeExercicioEnum);
             }
         }
         return suggestions;
