@@ -127,6 +127,7 @@
 								</p:dataTable>
 
 								<p:commandButton value="Responder" update="@form"
+									disabled="#{responderExercicioBean.respostaDeQuestaoDeMultiplaEscolha != null and responderExercicioBean.respostaDeQuestaoDeMultiplaEscolha.id != null}"
 									action="#{responderExercicioBean.responderQuestaoDeMultiplaEscolha}" />
 							</h:panelGrid>
 						</h:form>
@@ -135,7 +136,7 @@
 					<p:panel id="panelDeResponderQuestaoDissertativa"
 						rendered="#{responderExercicioBean.renderizarQuestaoDissertativa}">
 						<h:form id="formRespostaDissertativa">
-							<p:growl id="growlD"/>
+							<p:growl id="growlD" />
 
 							<div align="center">
 								<h3 style="width: 700px;">#{responderExercicioBean.questaoDissertativa.questao.enunciado}</h3>
@@ -151,6 +152,7 @@
 									value="#{responderExercicioBean.solucaoDeQuestaoDissertativa}" />
 
 								<p:commandButton value="Responder" update="@form"
+									disabled="#{responderExercicioBean.respostaDeQuestaoDissertativa != null and responderExercicioBean.respostaDeQuestaoDissertativa.id != null}"
 									action="#{responderExercicioBean.responderQuestaoDissertativa}" />
 							</h:panelGrid>
 						</h:form>
@@ -184,6 +186,7 @@
 								</p:dataTable>
 
 								<p:commandButton value="Responder" update="@form"
+									disabled="#{responderExercicioBean.respostaDeQuestaoDeVouF != null and responderExercicioBean.respostaDeQuestaoDeVouF.id != null}"
 									action="#{responderExercicioBean.responderQuestaoDeVouF}" />
 							</h:panelGrid>
 						</h:form>
