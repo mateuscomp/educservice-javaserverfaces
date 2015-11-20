@@ -85,18 +85,16 @@
 
 				<p:panel id="panelRespostas">
 					<h:form id="formRespostas">
+						<p:growl autoUpdate="true" />
+
 						<h:panelGrid columns="3">
-
-							<p:commandButton value="Anterior"
-								update="@this, :formRespostas, :formRespostaMultiplaEscolha, :formRespostaDissertativa, :formRespostaVouF"
-								style="width : 100px; height: 50px;" />
-
 							<div align="center">
-								<h3 style="width: 700px;">#{responderExercicioBean.questao.nome}</h3>
+								<h3 style="width: 800px;">#{responderExercicioBean.questao.nome}</h3>
 							</div>
 
-							<p:commandButton value="Próxima"
-								update="@this, :formRespostas, :formRespostaMultiplaEscolha, :formRespostaDissertativa, :formRespostaVouF"
+							<p:commandButton value="Próxima" update="@all"
+								actionListener="#{responderExercicioBean.proximaQuestao}"
+								rendered="#{responderExercicioBean.renderizarBotaoProximo}"
 								style="width : 100px; height: 50px;" />
 						</h:panelGrid>
 					</h:form>
@@ -104,6 +102,8 @@
 					<p:panel id="panelDeResponderQuestaoMultiplaEscolha"
 						rendered="#{responderExercicioBean.renderizarQuestaoDeMultiplaEscolha}">
 						<h:form id="formRespostaMultiplaEscolha">
+							<p:growl id="growlME" autoUpdate="true" />
+
 							<div align="center">
 								<h3 style="width: 700px;">#{responderExercicioBean.questaoDeMultiplaEscolha.questao.enunciado}</h3>
 							</div>
@@ -123,7 +123,7 @@
 									</p:column>
 								</p:dataTable>
 
-								<p:commandButton value="Responder"
+								<p:commandButton value="Responder" update="@all"
 									action="#{responderExercicioBean.responderQuestaoDeMultiplaEscolha}" />
 							</h:panelGrid>
 						</h:form>
@@ -132,22 +132,32 @@
 					<p:panel id="panelDeResponderQuestaoDissertativa"
 						rendered="#{responderExercicioBean.renderizarQuestaoDissertativa}">
 						<h:form id="formRespostaDissertativa">
+							<p:growl id="growlD" autoUpdate="true" />
+
 							<div align="center">
 								<h3 style="width: 700px;">#{responderExercicioBean.questaoDissertativa.questao.enunciado}</h3>
 							</div>
+							
+							<p:spacer width="1" height="3"/>
 
 							<h:panelGrid>
 								<h3>Insira a resposta</h3>
-								<p:inputTextarea style="width: 800px" required="true"
+								<p:inputTextarea autoResize="false"
+									style="width: 800px; height: 50px" required="true"
+									requiredMessage="Solução é obrigatório!"
 									value="#{responderExercicioBean.solucaoDeQuestaoDissertativa}" />
-							</h:panelGrid>
 
+								<p:commandButton value="Responder" update="@all"
+									action="#{responderExercicioBean.responderQuestaoDissertativa}" />
+							</h:panelGrid>
 						</h:form>
 					</p:panel>
 
 					<p:panel id="panelDeResponderQuestaoVerdadeiroOuFalso"
 						rendered="#{responderExercicioBean.renderizarQuestaoDeVouF}">
 						<h:form id="formRespostaVouF">
+							<p:growl id="growlVF" autoUpdate="true" />
+
 							<div align="center">
 								<h3 style="width: 700px;">#{responderExercicioBean.questaoVouF.questao.enunciado}</h3>
 							</div>
@@ -155,22 +165,23 @@
 							<p:spacer width="1" height="5" />
 
 							<h:panelGrid columns="1" cellpadding="5">
-								<h:panelGrid>
-									<h3>Selecione as opções corretas</h3>
-									<p:dataTable id="checkboxDT" var="alternativa"
-										value="#{responderExercicioBean.questaoVouF.alternativas}"
-										rowKey="#{alternativa.id}"
-										selection="#{responderExercicioBean.respostasAlternativasVouFSelecionadas}"
-										style="width: 800px;">
+								<h3>Selecione as opções corretas</h3>
+								<p:dataTable id="checkboxDT" var="alternativa"
+									value="#{responderExercicioBean.questaoVouF.alternativas}"
+									rowKey="#{alternativa.id}"
+									selection="#{responderExercicioBean.respostasAlternativasVouFSelecionadas}"
+									style="width: 800px;">
 
-										<p:column selectionMode="multiple"
-											style="width:16px;text-align:center" />
+									<p:column selectionMode="multiple"
+										style="width:16px;text-align:center" />
 
-										<p:column headerText="Descrição">
-											<h:outputText value="#{alternativa.alternativa}" />
-										</p:column>
-									</p:dataTable>
-								</h:panelGrid>
+									<p:column headerText="Descrição">
+										<h:outputText value="#{alternativa.alternativa}" />
+									</p:column>
+								</p:dataTable>
+
+								<p:commandButton value="Responder" update="@all"
+									action="#{responderExercicioBean.responderQuestaoDeVouF}" />
 							</h:panelGrid>
 						</h:form>
 					</p:panel>

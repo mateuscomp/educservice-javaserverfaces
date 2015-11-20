@@ -100,7 +100,7 @@ public class EducServiceJsfUtil {
 				.toString();
 
 		try {
-			EducServiceJsfUtil.obterResponse().sendRedirect("/" + uri);
+			EducServiceJsfUtil.obterResponse().sendRedirect(uri);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -1,6 +1,7 @@
 package br.ufpb.dcx.jsf;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.component.html.HtmlPanelGrid;
@@ -11,6 +12,7 @@ import org.springframework.roo.addon.serializable.RooSerializable;
 
 import br.ufpb.dcx.jsf.util.EducServiceJsfUtil;
 import br.ufpb.dcx.model.AlternativaDeQuestaoDeMultiplaEscolha;
+import br.ufpb.dcx.model.AlternativaVouF;
 import br.ufpb.dcx.model.Exercicio;
 import br.ufpb.dcx.model.Questao;
 import br.ufpb.dcx.model.QuestaoDeMultiplaEscolha;
@@ -28,7 +30,10 @@ import br.ufpb.dcx.service.QuestaoDeMultiplaEscolhaService;
 import br.ufpb.dcx.service.QuestaoDissertativaService;
 import br.ufpb.dcx.service.QuestaoVouFService;
 import br.ufpb.dcx.service.RespostaDeExercicioService;
+import br.ufpb.dcx.service.RespostaDeQuestaoDeMultiplaEscolhaService;
 import br.ufpb.dcx.service.RespostaDeQuestaoDeUmExercicioService;
+import br.ufpb.dcx.service.RespostaDeQuestaoDeVouFService;
+import br.ufpb.dcx.service.RespostaDeQuestaoDissertativaService;
 
 @RooSerializable
 @RooJsfManagedBean(entity = RespostaDeExercicio.class, beanName = "responderExercicioBean")
@@ -38,21 +43,22 @@ public class ResponderExercicioBean implements Serializable {
 
 	@Autowired
 	private ExercicioService exercicioService;
-
 	@Autowired
 	private QuestaoDeMultiplaEscolhaService questaoDeMultiplaEscolhaService;
-
 	@Autowired
 	private QuestaoDissertativaService questaoDissertativaService;
-
 	@Autowired
 	private QuestaoVouFService questaoVouFService;
-	
 	@Autowired
 	private RespostaDeExercicioService respostaDeExercicioService;
-	
 	@Autowired
 	private RespostaDeQuestaoDeUmExercicioService respostaDeQuestaoDeUmExercicioService;
+	@Autowired
+	private RespostaDeQuestaoDeMultiplaEscolhaService respostaDeQuestaoDeMultiplaEscolhaService;
+	@Autowired
+	private RespostaDeQuestaoDissertativaService respostaDeQuestaoDissertativaService;
+	@Autowired
+	private RespostaDeQuestaoDeVouFService respostaDeQuestaoDeVouFService;
 
 	private String apelidoDoProfessorPesquisa;
 	private String emailDoProfessorPesquisa;
@@ -77,14 +83,10 @@ public class ResponderExercicioBean implements Serializable {
 	private RespostaDeQuestaoDissertativa respostaDeQuestaoDissertativa;
 	private RespostaDeQuestaoDeVouF respostaDeQuestaoDeVouF;
 
-	private List<RespostaDeAlternativaVouF> respostasAlternativasVouFSelecionadas;
+	private List<AlternativaVouF> respostasAlternativasVouFSelecionadas;
 
 	public ResponderExercicioBean() {
 		this.questao = new Questao();
-	}
-	
-	public void testarOneMenu(){
-		System.out.println("Mudou alguma coisa");
 	}
 
 	public void pesquisar() {
@@ -96,23 +98,106 @@ public class ResponderExercicioBean implements Serializable {
 					.lancarMensagemDeAlerta("Nenhum exercício encontrado!");
 		}
 	}
-	
-	public void responderQuestaoDeMultiplaEscolha(){
+
+	public void responderQuestaoDeMultiplaEscolha() {
+
+		boolean temAlternativaCooreta = false;
+		try {
+			for (int i = 0; i < questaoDeMultiplaEscolha.getAlternativas()
+					.size(); i++) {
+
+				if (questaoDeMultiplaEscolha
+						.getAlternativas()
+						.get(i)
+						.getDescricao()
+						.equals(alternativaDeQuestaoDeMultiplaEscolha
+								.getDescricao())) {
+					respostaDeQuestaoDeMultiplaEscolha
+							.setIndiceDaAlternativaCorreta(i);
+					temAlternativaCooreta = true;
+					break;
+				}
+			}
+			if (temAlternativaCooreta) {
+				this.inicializarRespostaDeQuestao();
+				this.respostaDeQuestaoDeMultiplaEscolhaService
+						.saveRespostaDeQuestaoDeMultiplaEscolha(respostaDeQuestaoDeMultiplaEscolha);
+			}
+		} catch (Exception e) {
+			EducServiceJsfUtil
+					.lancarMensagemDeErro("Pelo menos uma alternativa correta deve ser selecionada!");
+		}
+	}
+
+	public void responderQuestaoDissertativa() {
+		this.inicializarRespostaDeQuestao();
+		this.respostaDeQuestaoDissertativa
+				.setResposta(solucaoDeQuestaoDissertativa);
+
+		this.respostaDeQuestaoDissertativaService
+				.saveRespostaDeQuestaoDissertativa(this.respostaDeQuestaoDissertativa);
+	}
+
+	public void responderQuestaoDeVouF() {
+		this.inicializarRespostaDeQuestao();
+
+		List<RespostaDeAlternativaVouF> respostas = new ArrayList<RespostaDeAlternativaVouF>();
+		for (AlternativaVouF altVF : this.questaoVouF.getAlternativas()) {
+
+			RespostaDeAlternativaVouF respostaDeAlternativaVF = new RespostaDeAlternativaVouF();
+			respostaDeAlternativaVF.setAlternativaVouF(altVF);
+			respostaDeAlternativaVF.setResposta(false);
+
+			for (AlternativaVouF altV : respostasAlternativasVouFSelecionadas) {
+				if (altVF.getId().equals(altV.getId())) {
+					respostaDeAlternativaVF.setResposta(true);
+				}
+			}
+			respostas.add(respostaDeAlternativaVF);
+		}
+		this.respostaDeQuestaoDeVouF.setRespostasDeAlternativas(respostas);
+		this.respostaDeQuestaoDeVouFService
+				.salvarRespostaDeQuestaoDeVouF(respostaDeQuestaoDeVouF);
+	}
+
+	private void inicializarRespostaDeQuestao() {
 		this.respostaDeQuestao = new RespostaDeQuestaoDeUmExercicio();
 		this.respostaDeQuestao.setRespostaDeExercicio(respostaDeExercicio);
 		this.respostaDeQuestao.setQuestao(questao);
+
+		this.respostaDeQuestaoDeUmExercicioService
+				.saveRespostaDeQuestaoDeUmExercicio(respostaDeQuestao);
+	}
+
+	public void proximaQuestao() {
+		this.alternativaDeQuestaoDeMultiplaEscolha = null;
+		this.solucaoDeQuestaoDissertativa = null;
+		this.respostasAlternativasVouFSelecionadas = null;
 		
-		this.respostaDeQuestaoDeUmExercicioService.saveRespostaDeQuestaoDeUmExercicio(respostaDeQuestao);
-		
-		for(int i = 0; i < questaoDeMultiplaEscolha.getAlternativas().size(); i ++){
-			if(questaoDeMultiplaEscolha.getAlternativas().get(i).getDescricao().equals(alternativaDeQuestaoDeMultiplaEscolha.getDescricao())){
-				respostaDeQuestaoDeMultiplaEscolha.setIndiceDaAlternativaCorreta(i);
-				break;
-			}
+		this.indiceDeQuestao++;
+		Questao proximaQuestao = exercicio.getQuestoes().get(indiceDeQuestao);
+		if (proximaQuestao != null) {
+			questao = proximaQuestao;
+			this.selecionarQuestao(questao);
+		} else {
+			this.questaoDeMultiplaEscolha = null;
+			this.respostaDeQuestaoDeMultiplaEscolha = null;
+			
+			this.questaoDissertativa = null;
+			this.respostaDeQuestaoDissertativa = null;
+
+			this.questaoVouF = null;
+			this.respostaDeQuestaoDeVouF = null;
+			
+			EducServiceJsfUtil.lancarMensagemDeErro("Exercício não possui a próxima questão. Questão atual é a última da lista!");
 		}
 	}
 
 	public void responder(Exercicio exercicio) {
+		this.alternativaDeQuestaoDeMultiplaEscolha = null;
+		this.solucaoDeQuestaoDissertativa = null;
+		this.respostasAlternativasVouFSelecionadas = null;
+
 		this.exercicio = exercicio;
 		this.indiceDeQuestao = 0;
 
@@ -123,7 +208,8 @@ public class ResponderExercicioBean implements Serializable {
 		this.respostaDeExercicio = new RespostaDeExercicio();
 		this.respostaDeExercicio.setAluno(aluno);
 		this.respostaDeExercicio.setExercicio(exercicio);
-		this.respostaDeExercicioService.saveRespostaDeExercicio(this.respostaDeExercicio);
+		this.respostaDeExercicioService
+				.saveRespostaDeExercicio(this.respostaDeExercicio);
 
 	}
 
@@ -140,7 +226,8 @@ public class ResponderExercicioBean implements Serializable {
 			this.respostaDeQuestaoDeVouF = null;
 
 			this.respostaDeQuestaoDeMultiplaEscolha = new RespostaDeQuestaoDeMultiplaEscolha();
-			this.respostaDeQuestaoDeMultiplaEscolha.setRespostaDeQuestaoDeUmExercicio(this.respostaDeQuestao);
+			this.respostaDeQuestaoDeMultiplaEscolha
+					.setRespostaDeQuestaoDeUmExercicio(this.respostaDeQuestao);
 
 			return;
 		}
@@ -178,6 +265,13 @@ public class ResponderExercicioBean implements Serializable {
 			this.respostaDeQuestaoDeVouF
 					.setRespostaDeQuestaoDeUmExercicio(this.respostaDeQuestao);
 		}
+	}
+	
+	public boolean getRenderizarBotaoProximo(){
+		if(exercicio != null && exercicio.getQuestoes() != null && exercicio.getQuestoes().size() > indiceDeQuestao + 1){
+			return true;
+		}
+		return false;
 	}
 
 	public String getApelidoDoProfessorPesquisa() {
@@ -348,13 +442,12 @@ public class ResponderExercicioBean implements Serializable {
 		return null;
 	}
 
-	public List<RespostaDeAlternativaVouF> getRespostasAlternativasVouFSelecionadas() {
+	public List<AlternativaVouF> getRespostasAlternativasVouFSelecionadas() {
 		return respostasAlternativasVouFSelecionadas;
 	}
 
 	public void setRespostasAlternativasVouFSelecionadas(
-			List<RespostaDeAlternativaVouF> respostasAlternativasVouFSelecionadas) {
+			List<AlternativaVouF> respostasAlternativasVouFSelecionadas) {
 		this.respostasAlternativasVouFSelecionadas = respostasAlternativasVouFSelecionadas;
 	}
-
 }
