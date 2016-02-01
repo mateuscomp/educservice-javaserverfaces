@@ -5,22 +5,11 @@ package br.ufpb.dcx.model;
 
 import br.ufpb.dcx.model.QuestaoVouF;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import org.springframework.transaction.annotation.Transactional;
 
 privileged aspect QuestaoVouF_Roo_Jpa_ActiveRecord {
     
-    @PersistenceContext
-    transient EntityManager QuestaoVouF.entityManager;
-    
-    public static final List<String> QuestaoVouF.fieldNames4OrderClauseFilter = java.util.Arrays.asList("serialVersionUID", "alternativas", "questao");
-    
-    public static final EntityManager QuestaoVouF.entityManager() {
-        EntityManager em = new QuestaoVouF().entityManager;
-        if (em == null) throw new IllegalStateException("Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)");
-        return em;
-    }
+    public static final List<String> QuestaoVouF.fieldNames4OrderClauseFilter = java.util.Arrays.asList("alternativas");
     
     public static long QuestaoVouF.countQuestaoVouFs() {
         return entityManager().createQuery("SELECT COUNT(o) FROM QuestaoVouF o", Long.class).getSingleResult();
@@ -59,35 +48,6 @@ privileged aspect QuestaoVouF_Roo_Jpa_ActiveRecord {
             }
         }
         return entityManager().createQuery(jpaQuery, QuestaoVouF.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
-    }
-    
-    @Transactional
-    public void QuestaoVouF.persist() {
-        if (this.entityManager == null) this.entityManager = entityManager();
-        this.entityManager.persist(this);
-    }
-    
-    @Transactional
-    public void QuestaoVouF.remove() {
-        if (this.entityManager == null) this.entityManager = entityManager();
-        if (this.entityManager.contains(this)) {
-            this.entityManager.remove(this);
-        } else {
-            QuestaoVouF attached = QuestaoVouF.findQuestaoVouF(this.id);
-            this.entityManager.remove(attached);
-        }
-    }
-    
-    @Transactional
-    public void QuestaoVouF.flush() {
-        if (this.entityManager == null) this.entityManager = entityManager();
-        this.entityManager.flush();
-    }
-    
-    @Transactional
-    public void QuestaoVouF.clear() {
-        if (this.entityManager == null) this.entityManager = entityManager();
-        this.entityManager.clear();
     }
     
     @Transactional

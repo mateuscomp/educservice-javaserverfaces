@@ -4,7 +4,6 @@
 package br.ufpb.dcx.model;
 
 import br.ufpb.dcx.model.AlternativaVouF;
-import br.ufpb.dcx.model.Questao;
 import br.ufpb.dcx.model.QuestaoVouF;
 import java.util.List;
 
@@ -16,14 +15,6 @@ privileged aspect QuestaoVouF_Roo_JavaBean {
     
     public void QuestaoVouF.setAlternativas(List<AlternativaVouF> alternativas) {
         this.alternativas = alternativas;
-    }
-    
-    public Questao QuestaoVouF.getQuestao() {
-        return this.questao;
-    }
-    
-    public void QuestaoVouF.setQuestao(Questao questao) {
-        this.questao = questao;
     }
     
 }

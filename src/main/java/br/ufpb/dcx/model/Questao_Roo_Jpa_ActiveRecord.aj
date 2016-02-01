@@ -14,10 +14,11 @@ privileged aspect Questao_Roo_Jpa_ActiveRecord {
     @PersistenceContext
     transient EntityManager Questao.entityManager;
     
-    public static final List<String> Questao.fieldNames4OrderClauseFilter = java.util.Arrays.asList("serialVersionUID", "nome", "enunciado", "professor");
+    public static final List<String> Questao.fieldNames4OrderClauseFilter = java.util.Arrays.asList("nome", "enunciado", "professor");
     
     public static final EntityManager Questao.entityManager() {
-        EntityManager em = new Questao().entityManager;
+        EntityManager em = new Questao() {
+        }.entityManager;
         if (em == null) throw new IllegalStateException("Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)");
         return em;
     }

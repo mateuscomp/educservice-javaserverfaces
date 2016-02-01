@@ -29,6 +29,12 @@ public class LoginBean {
 	private String senha;
 
 	public void autenticar() {
+		 try {
+			Thread.sleep(10000);
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		}
+		
 		Usuario usuario = this.usuarioService.pesquisarUsuarioPorEmailOrNickNameAndSenha(login, senha);
 		if (usuario != null) {
 			EducServiceJsfUtil.adicionarUsuarioNaSessao(usuario);

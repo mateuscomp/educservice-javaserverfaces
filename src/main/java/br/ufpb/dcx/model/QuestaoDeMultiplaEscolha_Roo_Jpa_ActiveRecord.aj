@@ -5,22 +5,11 @@ package br.ufpb.dcx.model;
 
 import br.ufpb.dcx.model.QuestaoDeMultiplaEscolha;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import org.springframework.transaction.annotation.Transactional;
 
 privileged aspect QuestaoDeMultiplaEscolha_Roo_Jpa_ActiveRecord {
     
-    @PersistenceContext
-    transient EntityManager QuestaoDeMultiplaEscolha.entityManager;
-    
-    public static final List<String> QuestaoDeMultiplaEscolha.fieldNames4OrderClauseFilter = java.util.Arrays.asList("serialVersionUID", "alternativas", "questao");
-    
-    public static final EntityManager QuestaoDeMultiplaEscolha.entityManager() {
-        EntityManager em = new QuestaoDeMultiplaEscolha().entityManager;
-        if (em == null) throw new IllegalStateException("Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)");
-        return em;
-    }
+    public static final List<String> QuestaoDeMultiplaEscolha.fieldNames4OrderClauseFilter = java.util.Arrays.asList("serialVersionUID", "alternativas");
     
     public static long QuestaoDeMultiplaEscolha.countQuestaoDeMultiplaEscolhas() {
         return entityManager().createQuery("SELECT COUNT(o) FROM QuestaoDeMultiplaEscolha o", Long.class).getSingleResult();
@@ -59,35 +48,6 @@ privileged aspect QuestaoDeMultiplaEscolha_Roo_Jpa_ActiveRecord {
             }
         }
         return entityManager().createQuery(jpaQuery, QuestaoDeMultiplaEscolha.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
-    }
-    
-    @Transactional
-    public void QuestaoDeMultiplaEscolha.persist() {
-        if (this.entityManager == null) this.entityManager = entityManager();
-        this.entityManager.persist(this);
-    }
-    
-    @Transactional
-    public void QuestaoDeMultiplaEscolha.remove() {
-        if (this.entityManager == null) this.entityManager = entityManager();
-        if (this.entityManager.contains(this)) {
-            this.entityManager.remove(this);
-        } else {
-            QuestaoDeMultiplaEscolha attached = QuestaoDeMultiplaEscolha.findQuestaoDeMultiplaEscolha(this.id);
-            this.entityManager.remove(attached);
-        }
-    }
-    
-    @Transactional
-    public void QuestaoDeMultiplaEscolha.flush() {
-        if (this.entityManager == null) this.entityManager = entityManager();
-        this.entityManager.flush();
-    }
-    
-    @Transactional
-    public void QuestaoDeMultiplaEscolha.clear() {
-        if (this.entityManager == null) this.entityManager = entityManager();
-        this.entityManager.clear();
     }
     
     @Transactional

@@ -1,6 +1,5 @@
 package br.ufpb.dcx.model;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,9 +7,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.EntityManager;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.TypedQuery;
-import javax.validation.constraints.NotNull;
 
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
@@ -19,7 +16,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJavaBean
 @RooToString
 @RooJpaActiveRecord
-public class QuestaoDeMultiplaEscolha implements Serializable {
+public class QuestaoDeMultiplaEscolha extends Questao{
 
 	/**
      *
@@ -32,13 +29,6 @@ public class QuestaoDeMultiplaEscolha implements Serializable {
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<AlternativaDeQuestaoDeMultiplaEscolha> alternativas = new ArrayList<AlternativaDeQuestaoDeMultiplaEscolha>();
 
-	/**
-     */
-	@NotNull
-	@ManyToOne
-	private Questao questao;
-	
-	
 	public List<AlternativaDeQuestaoDeMultiplaEscolha> getAlternativas(){
 		return this.alternativas;
 	}
@@ -57,5 +47,19 @@ public class QuestaoDeMultiplaEscolha implements Serializable {
 			 return resultList.get(0);
 		 }
 		 return null;
+	}
+	
+	public static List<QuestaoDeMultiplaEscolha> pesquisarQuestoesDeMultiplaEscolhaByProfessor(
+			Usuario professorParameter, String nomeParameter) {
+		EntityManager em = Usuario.entityManager();
+
+		TypedQuery<QuestaoDeMultiplaEscolha> q = em
+				.createQuery(
+						"SELECT q FROM QuestaoDeMultiplaEscolha AS q WHERE q.professor.id = :id AND q.nome LIKE :nome ORDER BY q.id ASC",
+						QuestaoDeMultiplaEscolha.class);
+		q.setParameter("id", professorParameter.getId());
+		q.setParameter("nome", "%" + nomeParameter + "%");
+
+		return q.getResultList();
 	}
 }

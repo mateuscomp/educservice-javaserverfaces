@@ -38,10 +38,6 @@
             					Questões
         					</f:facet>
 
-							<p:column headerText="Id">
-								<h:outputText value="#{questao.id}" />
-							</p:column>
-
 							<p:column headerText="Nome" width="120">
 								<h:outputText value="#{questao.nomeFormatado}" />
 							</p:column>
@@ -81,14 +77,14 @@
 							<h:panelGrid cellpadding="3">
 								<p:outputLabel for="nomeDaQuestaoMEInputText" value="Nome" />
 								<p:inputText id="nomeDaQuestaoMEInputText" style="width: 300px;"
-									value="#{minhasQuestoesBean.questaoDeMultiplaEscolha.questao.nome}"
+									value="#{minhasQuestoesBean.questaoDeMultiplaEscolha.nome}"
 									required="true" requiredMessage="Nome é obrigatório"
 									maxlength="255" />
 
 								<p:outputLabel value="Enunciado"
 									for="enunciadoQMECadastroInputTextArea" />
 								<p:inputTextarea id="enunciadoQMECadastroInputTextArea"
-									value="#{minhasQuestoesBean.questaoDeMultiplaEscolha.questao.enunciado}"
+									value="#{minhasQuestoesBean.questaoDeMultiplaEscolha.enunciado}"
 									style="width: 900px; height: 50px;" required="true"
 									requiredMessage="Enunciado é obrigatório" />
 
@@ -121,10 +117,6 @@
 											emptyMessage="Nenhuma alternativa cadastrada!"
 											paginator="true" rows="5" rowsPerPageTemplate="5"
 											paginatorPosition="bottom">
-
-											<p:column headerText="Id">
-												<h:outputText value="#{alternativa.id}" />
-											</p:column>
 
 											<p:column headerText="Descrição" width="430">
 												<h:outputText value="#{alternativa.descricaoFormatada}" />
@@ -169,14 +161,14 @@
 							<h:panelGrid cellpadding="3">
 								<p:outputLabel for="nomeDaQuestaoMDInputText" value="Nome" />
 								<p:inputText id="nomeDaQuestaoMDInputText" style="width: 300px;"
-									value="#{minhasQuestoesBean.questaoDissertativa.questao.nome}"
+									value="#{minhasQuestoesBean.questaoDissertativa.nome}"
 									required="true" requiredMessage="Nome é obrigatório"
 									maxlength="255" />
 
 								<p:outputLabel value="Enunciado"
 									for="enunciadoQDCadastroInputTextArea" />
 								<p:inputTextarea id="enunciadoQDCadastroInputTextArea"
-									value="#{minhasQuestoesBean.questaoDissertativa.questao.enunciado}"
+									value="#{minhasQuestoesBean.questaoDissertativa.enunciado}"
 									style="width: 900px; height: 50px;" required="true"
 									requiredMessage="Enunciado é obrigatório" />
 
@@ -205,14 +197,14 @@
 							<h:panelGrid cellpadding="3">
 								<p:outputLabel for="nomeDaQuestaoVFInputText" value="Nome" />
 								<p:inputText id="nomeDaQuestaoVFInputText" style="width: 300px;"
-									value="#{minhasQuestoesBean.questaoVerdadeiroOuFalso.questao.nome}"
+									value="#{minhasQuestoesBean.questaoVerdadeiroOuFalso.nome}"
 									required="true" requiredMessage="Nome é obrigatório"
 									maxlength="255" />
 
 								<p:outputLabel value="Enunciado"
 									for="enunciadoVFCadastroInputTextArea" />
 								<p:inputTextarea id="enunciadoVFCadastroInputTextArea"
-									value="#{minhasQuestoesBean.questaoVerdadeiroOuFalso.questao.enunciado}"
+									value="#{minhasQuestoesBean.questaoVerdadeiroOuFalso.enunciado}"
 									style="width: 900px; height: 50px;" required="true"
 									requiredMessage="Enunciado é obrigatório" />
 
@@ -246,10 +238,6 @@
 											emptyMessage="Nenhuma alternativa cadastrada!"
 											paginator="true" rows="5" rowsPerPageTemplate="5"
 											paginatorPosition="bottom">
-
-											<p:column headerText="Id">
-												<h:outputText value="#{alternativaVF.id}" />
-											</p:column>
 
 											<p:column headerText="Descrição" width="430">
 												<h:outputText value="#{alternativaVF.alternativaFormatada}" />

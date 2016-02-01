@@ -6,6 +6,7 @@ import org.springframework.roo.addon.layers.service.RooService;
 import br.ufpb.dcx.model.AlternativaDeQuestaoDeMultiplaEscolha;
 import br.ufpb.dcx.model.Questao;
 import br.ufpb.dcx.model.QuestaoDeMultiplaEscolha;
+import br.ufpb.dcx.model.Usuario;
 
 @RooService(domainTypes = { br.ufpb.dcx.model.QuestaoDeMultiplaEscolha.class })
 public interface QuestaoDeMultiplaEscolhaService{
@@ -17,4 +18,7 @@ public interface QuestaoDeMultiplaEscolhaService{
 
 	QuestaoDeMultiplaEscolha pesquisarPorIdDeQuestao(
 			Questao questao);
+
+	List<QuestaoDeMultiplaEscolha> pesquisarQuestoesDeMultiplaEscolhaPorProfessorAndNome(
+			Usuario professor, String nomePesquisa);
 }

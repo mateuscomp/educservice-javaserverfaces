@@ -12,52 +12,58 @@
 			<p:separator />
 
 			<h:panelGrid>
-				<h3>Pesquisar Exercício</h3>
+				<p:panel id="panelPesquisa" header="Pesquisar" toggleable="true"
+					toggleSpeed="500" widgetVar="panelPesquisaWidgetVar"
+					toggleOrientation="vertical"
+					style="margin-bottom:20px; width: 970px">
 
-				<h:form id="exerciciosPesquisaForm">
-					<p:growl id="growlPesquisa" />
+					<h:form id="exerciciosPesquisaForm">
+						<p:growl id="growlPesquisa" />
 
-					<h:panelGrid>
-						<p:commandButton id="pesquisarCommandButton" value="Pesquisar"
-							actionListener="#{exercicioBean.pesquisar}"
-							update="exerciciosDataTable, growlPesquisa" />
+						<h:panelGrid>
+							<p:commandButton id="pesquisarCommandButton" value="Pesquisar"
+								actionListener="#{exercicioBean.pesquisar}"
+								update="exerciciosDataTable, growlPesquisa" />
 
-						<p:dataTable id="exerciciosDataTable" style="width: 950px"
-							value="#{exercicioBean.exercicios}" var="exercicio"
-							emptyMessage="Nenhum exercício encontrado!" paginator="true"
-							rows="10" rowsPerPageTemplate="5, 10, 15"
-							paginatorPosition="bottom">
+							<p:dataTable id="exerciciosDataTable" style="width: 950px"
+								value="#{exercicioBean.exercicios}" var="exercicio"
+								emptyMessage="Nenhum exercício encontrado!" paginator="true"
+								rows="10" rowsPerPageTemplate="5, 10, 15"
+								paginatorPosition="bottom">
 
-							<f:facet name="header">
+								<f:facet name="header">
             					Exercícios
         					</f:facet>
 
-							<p:column headerText="Nome" width="700">
-								<h:outputText value="#{exercicio.nomeFormatado}" />
-							</p:column>
+								<p:column headerText="Nome" width="700">
+									<h:outputText value="#{exercicio.nomeFormatado}" />
+								</p:column>
 
-							<p:column headerText="Data de vencimento" width="130">
-								<h:outputText value="#{exercicio.dataDeVencimentoFormatada}" />
-							</p:column>
+								<p:column headerText="Data de vencimento" width="130">
+									<h:outputText value="#{exercicio.dataDeVencimentoFormatada}" />
+								</p:column>
 
-							<p:column headerText="Editar">
-								<div align="center">
-									<p:commandLink
-										actionListener="#{exercicioBean.editar(exercicio)}"
-										update=":formCadastroExercicio, :formCadastroExercicio:questoesDeExercicioDataTable">
+								<p:column headerText="Editar">
+									<div align="center">
+										<p:commandLink
+											actionListener="#{exercicioBean.editar(exercicio)}"
+											update=":formCadastroExercicio, :formCadastroExercicio:questoesDeExercicioDataTable">
 
-										<p:graphicImage
-											url="https://s3-us-west-2.amazonaws.com/educservicebucket/images/edit.png"
-											width="20" height="20" />
-									</p:commandLink>
-								</div>
-							</p:column>
-						</p:dataTable>
-					</h:panelGrid>
-				</h:form>
+											<p:graphicImage
+												url="https://s3-us-west-2.amazonaws.com/educservicebucket/images/edit.png"
+												width="20" height="20" />
+										</p:commandLink>
+									</div>
+								</p:column>
+							</p:dataTable>
+						</h:panelGrid>
+					</h:form>
+				</p:panel>
 
-				<p:panel id="panelCadastro">
-					<h3>Cadastrar Exercício</h3>
+				<p:panel id="panelCadastro" header="Cadastrar" toggleable="true"
+					toggleSpeed="500" widgetVar="panelCadastroWidgetVar"
+					toggleOrientation="vertical"
+					style="margin-bottom:20px; width: 970px">
 					<h:form id="formCadastroExercicio">
 						<p:growl id="growlCadastroExercicio" />
 
@@ -81,11 +87,9 @@
 								</h:panelGrid>
 							</h:panelGrid>
 
-							<h4>Questões</h4>
 							<p:commandButton value="Add. Questão" type="button"
+								icon="ui-icon-plus"
 								onclick="modalPesquisaDeQuestoesWidgetVar.show();" />
-
-
 							<p:dataTable id="questoesDeExercicioDataTable"
 								style="width: 850px" value="#{exercicioBean.exercicio.questoes}"
 								var="questao" emptyMessage="Nenhuma questão cadastrada!"
@@ -102,7 +106,7 @@
 								<p:column headerText="Enunciado" width="600">
 									<h:outputText value="#{questao.enunciadoFormatado}" />
 								</p:column>
-								
+
 								<p:column headerText="Remover">
 									<div align="center">
 										<p:commandLink
@@ -118,8 +122,14 @@
 								</p:column>
 							</p:dataTable>
 
-							<p:commandButton value="Salvar"
-								actionListener="#{exercicioBean.salvar}" update="@form" />
+							<h:panelGrid columns="2">
+								<p:commandButton value="Salvar"
+									actionListener="#{exercicioBean.salvar}" update="@form" />
+
+								<p:commandButton value="Limpar"
+									actionListener="#{questaoDeMultiplaEscolhaBean.limparCadastro}"
+									update="@form" />
+							</h:panelGrid>
 						</h:panelGrid>
 					</h:form>
 				</p:panel>
@@ -168,7 +178,7 @@
 									process="pesquisaDeQuestoesDataTable">
 
 									<p:graphicImage
-										url="https://s3-us-west-2.amazonaws.com/educservicebucket/images/edit.png"
+										url="https://s3-us-west-2.amazonaws.com/educservicebucket/images/accept.png"
 										width="20" height="20" />
 								</p:commandLink>
 							</div>

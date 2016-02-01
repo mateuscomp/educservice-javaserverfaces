@@ -8,17 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import br.ufpb.dcx.model.AlternativaVouF;
 import br.ufpb.dcx.model.Questao;
 import br.ufpb.dcx.model.QuestaoVouF;
+import br.ufpb.dcx.model.Usuario;
 
 public class QuestaoVouFServiceImpl implements QuestaoVouFService, Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * 
-	 */
 	@Autowired
 	private AlternativaDeQuestaoVouFService alternativaVouFService;
 
@@ -52,5 +47,12 @@ public class QuestaoVouFServiceImpl implements QuestaoVouFService, Serializable 
 		if(qtdAlternativas < 1){
 			throw new QuestaoException("Questão inválida! Pelo menos uma alternativa deve ser inserida na questão de múltipla escolha.");
 		}
+	}
+
+
+	@Override
+	public List<QuestaoVouF> findQuestoesByProfessorEqualsAndNomeLike(
+			Usuario professor, String nomePesquisa) {
+		return QuestaoVouF.pesquisarQuestoesDeMultiplaEscolhaByProfessor(professor, nomePesquisa);
 	}
 }

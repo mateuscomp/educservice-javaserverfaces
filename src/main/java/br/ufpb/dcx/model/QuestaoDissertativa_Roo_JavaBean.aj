@@ -3,7 +3,6 @@
 
 package br.ufpb.dcx.model;
 
-import br.ufpb.dcx.model.Questao;
 import br.ufpb.dcx.model.QuestaoDissertativa;
 
 privileged aspect QuestaoDissertativa_Roo_JavaBean {
@@ -14,14 +13,6 @@ privileged aspect QuestaoDissertativa_Roo_JavaBean {
     
     public void QuestaoDissertativa.setSolucao(String solucao) {
         this.solucao = solucao;
-    }
-    
-    public Questao QuestaoDissertativa.getQuestao() {
-        return this.questao;
-    }
-    
-    public void QuestaoDissertativa.setQuestao(Questao questao) {
-        this.questao = questao;
     }
     
 }

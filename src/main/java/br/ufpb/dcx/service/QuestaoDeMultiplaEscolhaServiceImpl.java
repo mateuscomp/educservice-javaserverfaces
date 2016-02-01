@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import br.ufpb.dcx.model.AlternativaDeQuestaoDeMultiplaEscolha;
 import br.ufpb.dcx.model.Questao;
 import br.ufpb.dcx.model.QuestaoDeMultiplaEscolha;
+import br.ufpb.dcx.model.Usuario;
 
 public class QuestaoDeMultiplaEscolhaServiceImpl implements
 		QuestaoDeMultiplaEscolhaService, Serializable {
@@ -97,5 +98,13 @@ public class QuestaoDeMultiplaEscolhaServiceImpl implements
 	public QuestaoDeMultiplaEscolha pesquisarPorIdDeQuestao(Questao questao) {
 		return QuestaoDeMultiplaEscolha
 				.findQuestaoDeMultiplaEscolhaByIdQuestao(questao.getId());
+	}
+
+	@Override
+	public List<QuestaoDeMultiplaEscolha> pesquisarQuestoesDeMultiplaEscolhaPorProfessorAndNome(
+			Usuario professor, String nomePesquisa) {
+		
+		return QuestaoDeMultiplaEscolha.pesquisarQuestoesDeMultiplaEscolhaByProfessor(professor, nomePesquisa);
+
 	}
 }

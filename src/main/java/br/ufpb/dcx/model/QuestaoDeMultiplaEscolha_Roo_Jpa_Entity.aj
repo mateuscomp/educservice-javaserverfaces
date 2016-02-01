@@ -4,40 +4,10 @@
 package br.ufpb.dcx.model;
 
 import br.ufpb.dcx.model.QuestaoDeMultiplaEscolha;
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Version;
 
 privileged aspect QuestaoDeMultiplaEscolha_Roo_Jpa_Entity {
     
     declare @type: QuestaoDeMultiplaEscolha: @Entity;
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
-    private Long QuestaoDeMultiplaEscolha.id;
-    
-    @Version
-    @Column(name = "version")
-    private Integer QuestaoDeMultiplaEscolha.version;
-    
-    public Long QuestaoDeMultiplaEscolha.getId() {
-        return this.id;
-    }
-    
-    public void QuestaoDeMultiplaEscolha.setId(Long id) {
-        this.id = id;
-    }
-    
-    public Integer QuestaoDeMultiplaEscolha.getVersion() {
-        return this.version;
-    }
-    
-    public void QuestaoDeMultiplaEscolha.setVersion(Integer version) {
-        this.version = version;
-    }
     
 }

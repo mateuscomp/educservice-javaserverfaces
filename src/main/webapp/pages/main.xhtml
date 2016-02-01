@@ -32,7 +32,8 @@
 
 						<h:panelGrid>
 							<p:spacer width="1" height="10" />
-							<p:commandButton action="#{loginBean.autenticar}" value="Entrar" ajax="false" update="growl" />
+							<p:commandButton action="#{loginBean.autenticar}" value="Entrar"
+								ajax="false" update="growl" />
 						</h:panelGrid>
 
 						<p:commandLink value="Esqueci minha senha"
@@ -60,9 +61,7 @@
 
 					<h:form>
 						<h:panelGrid>
-
 							<p:growl id="growlCadastroUsuario" />
-
 							<h:panelGrid>
 								<p:outputLabel for="perfilUsuarioSelectOneMenu" value="Perfil" />
 								<p:selectOneMenu id="perfilUsuarioSelectOneMenu"
@@ -89,7 +88,7 @@
 									requiredMessage="Nickname é obrigatório" style="width: 350px">
 									<p:ajax
 										listener="#{usuarioBean.verificarNickNamePreviamenteCadastrado}"
-										event="change" update="growlCadastroUsuario"/>
+										event="change" update="growlCadastroUsuario" />
 								</p:inputText>
 
 							</h:panelGrid>
@@ -104,8 +103,7 @@
 
 							<h:panelGrid>
 								<p:spacer width="1" height="5" />
-								<p:commandButton value="Cadastrar"
-									update="growlCadastroUsuario"
+								<p:commandButton value="Cadastrar" update="growlCadastroUsuario"
 									action="#{usuarioBean.cadastrar}" />
 							</h:panelGrid>
 						</h:panelGrid>

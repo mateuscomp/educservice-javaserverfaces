@@ -87,7 +87,6 @@ public class ResponderExercicioBean implements Serializable {
 	private List<AlternativaVouF> respostasAlternativasVouFSelecionadas;
 
 	public ResponderExercicioBean() {
-		this.questao = new Questao();
 	}
 
 	public void pesquisar() {
@@ -203,7 +202,6 @@ public class ResponderExercicioBean implements Serializable {
 		this.exercicio = null;
 		this.indiceDeQuestao = 0;
 
-		this.questao = new Questao();
 		this.questaoDissertativa = null;
 		this.questaoDeMultiplaEscolha = null;
 		this.questaoVouF = null;

@@ -4,40 +4,10 @@
 package br.ufpb.dcx.model;
 
 import br.ufpb.dcx.model.QuestaoDissertativa;
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Version;
 
 privileged aspect QuestaoDissertativa_Roo_Jpa_Entity {
     
     declare @type: QuestaoDissertativa: @Entity;
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
-    private Long QuestaoDissertativa.id;
-    
-    @Version
-    @Column(name = "version")
-    private Integer QuestaoDissertativa.version;
-    
-    public Long QuestaoDissertativa.getId() {
-        return this.id;
-    }
-    
-    public void QuestaoDissertativa.setId(Long id) {
-        this.id = id;
-    }
-    
-    public Integer QuestaoDissertativa.getVersion() {
-        return this.version;
-    }
-    
-    public void QuestaoDissertativa.setVersion(Integer version) {
-        this.version = version;
-    }
     
 }

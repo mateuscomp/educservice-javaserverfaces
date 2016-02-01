@@ -1,9 +1,11 @@
 package br.ufpb.dcx.service;
 
 import java.io.Serializable;
+import java.util.List;
 
 import br.ufpb.dcx.model.Questao;
 import br.ufpb.dcx.model.QuestaoDissertativa;
+import br.ufpb.dcx.model.Usuario;
 
 public class QuestaoDissertativaServiceImpl implements
 		QuestaoDissertativaService, Serializable {
@@ -27,5 +29,11 @@ public class QuestaoDissertativaServiceImpl implements
 		} else{
 			this.updateQuestaoDissertativa(questaoDissertativa);
 		}
+	}
+
+	@Override
+	public List<QuestaoDissertativa> pesquisarQuestoesDissertativasPorProfessorAndNome(
+			Usuario professor, String nomePesquisa) {
+		return QuestaoDissertativa.pesquisarQuestoesDeMultiplaEscolhaByProfessor(professor, nomePesquisa);
 	}
 }

@@ -5,22 +5,11 @@ package br.ufpb.dcx.model;
 
 import br.ufpb.dcx.model.QuestaoDissertativa;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import org.springframework.transaction.annotation.Transactional;
 
 privileged aspect QuestaoDissertativa_Roo_Jpa_ActiveRecord {
     
-    @PersistenceContext
-    transient EntityManager QuestaoDissertativa.entityManager;
-    
-    public static final List<String> QuestaoDissertativa.fieldNames4OrderClauseFilter = java.util.Arrays.asList("serialVersionUID", "solucao", "questao");
-    
-    public static final EntityManager QuestaoDissertativa.entityManager() {
-        EntityManager em = new QuestaoDissertativa().entityManager;
-        if (em == null) throw new IllegalStateException("Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)");
-        return em;
-    }
+    public static final List<String> QuestaoDissertativa.fieldNames4OrderClauseFilter = java.util.Arrays.asList("solucao");
     
     public static long QuestaoDissertativa.countQuestaoDissertativas() {
         return entityManager().createQuery("SELECT COUNT(o) FROM QuestaoDissertativa o", Long.class).getSingleResult();
@@ -59,35 +48,6 @@ privileged aspect QuestaoDissertativa_Roo_Jpa_ActiveRecord {
             }
         }
         return entityManager().createQuery(jpaQuery, QuestaoDissertativa.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
-    }
-    
-    @Transactional
-    public void QuestaoDissertativa.persist() {
-        if (this.entityManager == null) this.entityManager = entityManager();
-        this.entityManager.persist(this);
-    }
-    
-    @Transactional
-    public void QuestaoDissertativa.remove() {
-        if (this.entityManager == null) this.entityManager = entityManager();
-        if (this.entityManager.contains(this)) {
-            this.entityManager.remove(this);
-        } else {
-            QuestaoDissertativa attached = QuestaoDissertativa.findQuestaoDissertativa(this.id);
-            this.entityManager.remove(attached);
-        }
-    }
-    
-    @Transactional
-    public void QuestaoDissertativa.flush() {
-        if (this.entityManager == null) this.entityManager = entityManager();
-        this.entityManager.flush();
-    }
-    
-    @Transactional
-    public void QuestaoDissertativa.clear() {
-        if (this.entityManager == null) this.entityManager = entityManager();
-        this.entityManager.clear();
     }
     
     @Transactional

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="../../templates/private/layout.xhtml">
+	<ui:define name="content">
+		<p:panel id="panel">
+			<h1>Questão de Verdadeiro ou Falso</h1>
+			<p:separator />
+
+			<h:panelGrid>
+				<p:panel id="panelPesquisa" header="Pesquisar" toggleable="true"
+					toggleSpeed="500" widgetVar="panelPesquisaWidgetVar"
+					toggleOrientation="vertical" style="margin-bottom:20px; width: 970px" >
+
+					<h:form id="minhasQuestoesPesquisaForm">
+						<p:growl id="growlPesquisa" />
+
+						<h:panelGrid>
+							<h:panelGrid>
+								<p:outputLabel for="nomePesquisaInputText" value="Nome" />
+								<p:inputText id="nomePesquisaInputText" style="width: 200px;"
+									value="#{questaoDeVouFBean.nomePesquisa}" />
+							</h:panelGrid>
+
+							<p:commandButton id="pesquisarCommandButton" value="Pesquisar"
+								actionListener="#{questaoDeVouFBean.pesquisar}"
+								update="questoesDataTable, growlPesquisa" />
+
+							<p:dataTable id="questoesDataTable" style="width: 930px"
+								value="#{questaoDeVouFBean.questoes}" var="questao"
+								emptyMessage="Nenhuma questão encontrada!" paginator="true"
+								rows="10" rowsPerPageTemplate="5, 10, 15"
+								paginatorPosition="bottom">
+
+								<f:facet name="header">
+            					Questões
+        					</f:facet>
+
+								<p:column headerText="Nome" width="120">
+									<h:outputText value="#{questao.nomeFormatado}" />
+								</p:column>
+
+								<p:column headerText="Enunciado" width="600">
+									<h:outputText value="#{questao.enunciadoFormatado}" />
+								</p:column>
+
+								<p:column headerText="Editar">
+									<div align="center">
+										<p:commandLink
+											actionListener="#{questaoDeVouFBean.editar(questao)}"
+											update="@parent, @this, :formCadastroQVF">
+
+											<p:graphicImage
+												url="https://s3-us-west-2.amazonaws.com/educservicebucket/images/edit.png"
+												width="20" height="20" />
+										</p:commandLink>
+									</div>
+								</p:column>
+							</p:dataTable>
+						</h:panelGrid>
+					</h:form>
+				</p:panel>
+
+
+				<p:panel id="panelCadastro" header="Cadastrar" toggleable="true"
+					toggleSpeed="500" widgetVar="panelCadastroWidgetVar"
+					toggleOrientation="vertical" style="margin-bottom:20px; width: 970px">
+					<p:growl />
+					<h:form id="formCadastroQVF">
+						<p:growl id="growlQVF" />
+
+						<h:panelGrid cellpadding="3">
+							<p:outputLabel for="nomeDaQuestaoVFInputText" value="Nome" />
+							<p:inputText id="nomeDaQuestaoVFInputText" style="width: 300px;"
+								value="#{questaoDeVouFBean.questaoVerdadeiroOuFalso.nome}"
+								required="true" requiredMessage="Nome é obrigatório"
+								maxlength="255" />
+
+							<p:outputLabel value="Enunciado"
+								for="enunciadoVFCadastroInputTextArea" />
+							<p:inputTextarea id="enunciadoVFCadastroInputTextArea"
+								value="#{questaoDeVouFBean.questaoVerdadeiroOuFalso.enunciado}"
+								style="width: 900px; height: 50px;" required="true"
+								requiredMessage="Enunciado é obrigatório" />
+
+							<p:fieldset legend="Alternativas">
+								<h:panelGrid cellpadding="3">
+									<p:outputLabel for="alternativaVFInputText"
+										value="Descr. da Alternativa" />
+									<p:inputTextarea id="alternativaVFInputText" required="true"
+										requiredMessage="Descr. da Alternativa é obrigatório"
+										style="width: 830px; height: 50px;"
+										value="#{questaoDeVouFBean.alternativaVerdadeiroOuFalso.alternativa}" />
+
+									<h:panelGrid columns="2">
+										<p:outputLabel for="alternativaCorretaDaQuestaoVFInputText"
+											value="Resposta correta: " />
+										<p:selectBooleanButton
+											id="alternativaCorretaDaQuestaoVFInputText"
+											value="#{questaoDeVouFBean.alternativaVerdadeiroOuFalso.resposta}"
+											onLabel="Verdadeiro" offLabel="Falso" onIcon="ui-icon-check"
+											offIcon="ui-icon-close" />
+									</h:panelGrid>
+
+									<p:commandButton value="Adicionar alternativa" icon="ui-icon-plus"
+										actionListener="#{questaoDeVouFBean.adicionarAlternativaQVF}"
+										process="alternativaVFInputText, alternativaCorretaDaQuestaoVFInputText"
+										update="alternativaVFInputText, alternativaCorretaDaQuestaoVFInputText, alternativasVFDataTable, growlQVF" />
+
+									<p:dataTable id="alternativasVFDataTable" style="width: 830px"
+										value="#{questaoDeVouFBean.questaoVerdadeiroOuFalso.alternativas}"
+										var="alternativaVF"
+										emptyMessage="Nenhuma alternativa cadastrada!"
+										paginator="true" rows="5" rowsPerPageTemplate="5"
+										paginatorPosition="bottom">
+
+										<p:column headerText="Descrição" width="430">
+											<h:outputText value="#{alternativaVF.alternativaFormatada}" />
+										</p:column>
+
+										<p:column headerText="Resposta correta" width="100">
+											<h:outputText value="#{alternativaVF.resposta}" />
+										</p:column>
+
+										<p:column headerText="Remover" width="100">
+											<p:commandLink
+												actionListener="#{questaoDeVouFBean.removerAlternativaVF(alternativaVF)}"
+												update="alternativasVFDataTable"
+												process="alternativasVFDataTable">
+
+												<p:graphicImage
+													url="https://s3-us-west-2.amazonaws.com/educservicebucket/images/remove.png"
+													width="20" height="20" />
+											</p:commandLink>
+										</p:column>
+									</p:dataTable>
+								</h:panelGrid>
+							</p:fieldset>
+
+							<h:panelGrid columns="2">
+								<p:commandButton value="Salvar"
+									actionListener="#{questaoDeVouFBean.salvarQuestaoVouF}"
+									process="nomeDaQuestaoVFInputText, enunciadoVFCadastroInputTextArea"
+									update="@form, :minhasQuestoesPesquisaForm" />
+
+								<p:commandButton value="Limpar"
+									actionListener="#{questaoDeVouFBean.limpar}" process="@this"
+									update="@form" />
+							</h:panelGrid>
+						</h:panelGrid>
+					</h:form>
+				</p:panel>
+			</h:panelGrid>
+		</p:panel>
+	</ui:define>
+</ui:composition>
+</html>

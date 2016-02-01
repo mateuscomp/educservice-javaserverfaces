@@ -1,5 +1,5 @@
 package br.ufpb.dcx.model;
-import java.io.Serializable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,43 +15,43 @@ import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
 import org.springframework.roo.addon.tostring.RooToString;
 
-import javax.persistence.ManyToOne;
-import javax.validation.constraints.NotNull;
-
 @RooJavaBean
 @RooToString
 @RooJpaActiveRecord
 @Table(name = "questao_v_ou_f")
-public class QuestaoVouF implements Serializable {
+public class QuestaoVouF extends Questao {
 
-    /**
-     *
+	/**
      */
-    private static final long serialVersionUID = 1L;
-
-    /**
-     */
-    @Size(min = 1)
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<AlternativaVouF> alternativas = new ArrayList<AlternativaVouF>();
-
-    /**
-     */
-    @NotNull
-    @ManyToOne
-    private Questao questao;
+	@Size(min = 1)
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private List<AlternativaVouF> alternativas = new ArrayList<AlternativaVouF>();
 
 	public static QuestaoVouF findQuestaoVouFByIdDeQuestao(Long id) {
 		String query = "SELECT qvf FROM QuestaoVouF AS qvf WHERE qvf.questao.id =:id";
 		EntityManager em = Usuario.entityManager();
-		TypedQuery<QuestaoVouF> q = em.createQuery(query,
-				QuestaoVouF.class);
+		TypedQuery<QuestaoVouF> q = em.createQuery(query, QuestaoVouF.class);
 		q.setParameter("id", id);
-		
+
 		List<QuestaoVouF> resultList = q.getResultList();
-		 if (resultList != null && !resultList.isEmpty()){
-			 return resultList.get(0);
-		 }
-		 return null;
+		if (resultList != null && !resultList.isEmpty()) {
+			return resultList.get(0);
+		}
+		return null;
+	}
+
+	public static List<QuestaoVouF> pesquisarQuestoesDeMultiplaEscolhaByProfessor(
+			Usuario professorParameter, String nomeParameter) {
+
+		EntityManager em = Usuario.entityManager();
+
+		TypedQuery<QuestaoVouF> q = em
+				.createQuery(
+						"SELECT qvf FROM QuestaoVouF AS qvf WHERE qvf.professor.id = :id AND qvf.nome LIKE :nome ORDER BY qvf.id ASC",
+						QuestaoVouF.class);
+		q.setParameter("id", professorParameter.getId());
+		q.setParameter("nome", "%" + nomeParameter + "%");
+
+		return q.getResultList();
 	}
 }

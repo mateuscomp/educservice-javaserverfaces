@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="../../templates/private/layout.xhtml">
+	<ui:define name="content">
+		<p:panel id="panel">
+			<h1>Questão Dissertativa</h1>
+			<p:separator />
+
+			<h:panelGrid>
+				<p:panel id="panelPesquisa" header="Pesquisar" toggleable="true"
+					toggleSpeed="500" widgetVar="panelPesquisaWidgetVar" toggleOrientation="vertical"
+					style="margin-bottom:20px; width: 970px">
+
+					<h:form id="minhasQuestoesPesquisaForm">
+						<p:growl id="growlPesquisa" />
+
+						<h:panelGrid>
+							<h:panelGrid>
+								<p:outputLabel for="nomePesquisaInputText" value="Nome" />
+								<p:inputText id="nomePesquisaInputText" style="width: 200px;"
+									value="#{questaoDissertativaBean.nomePesquisa}" />
+							</h:panelGrid>
+
+							<p:commandButton id="pesquisarCommandButton" value="Pesquisar"
+								actionListener="#{questaoDissertativaBean.pesquisar}"
+								update="questoesDataTable, growlPesquisa" />
+
+							<p:dataTable id="questoesDataTable" style="width: 930px"
+								value="#{questaoDissertativaBean.questoesDissertativas}"
+								var="questao" emptyMessage="Nenhuma questão encontrada!"
+								paginator="true" rows="10" rowsPerPageTemplate="5, 10, 15"
+								paginatorPosition="bottom">
+
+								<f:facet name="header">
+            					Questões
+        					</f:facet>
+
+								<p:column headerText="Nome" width="120">
+									<h:outputText value="#{questao.nomeFormatado}" />
+								</p:column>
+
+								<p:column headerText="Enunciado" width="600">
+									<h:outputText value="#{questao.enunciadoFormatado}" />
+								</p:column>
+
+								<p:column headerText="Editar">
+									<div align="center">
+										<p:commandLink ajax="false"
+											actionListener="#{questaoDissertativaBean.editar(questao)}"
+											update="@parent, @this, :formCadastroQD">
+
+											<p:graphicImage
+												url="https://s3-us-west-2.amazonaws.com/educservicebucket/images/edit.png"
+												width="20" height="20" />
+										</p:commandLink>
+									</div>
+								</p:column>
+							</p:dataTable>
+						</h:panelGrid>
+					</h:form>
+				</p:panel>
+
+				<p:panel id="panelCadastro" header="Cadastrar" toggleable="true"
+					toggleSpeed="500" widgetVar="panelCadastroWidgetVar" toggleOrientation="vertical"
+					style="margin-bottom:20px; width: 970px">
+					<h:form id="formCadastroQD">
+						<p:growl />
+
+						<h:panelGrid cellpadding="3">
+							<p:outputLabel for="nomeDaQuestaoMDInputText" value="Nome" />
+							<p:inputText id="nomeDaQuestaoMDInputText" style="width: 300px;"
+								value="#{questaoDissertativaBean.questaoDissertativa.nome}"
+								required="true" requiredMessage="Nome é obrigatório"
+								maxlength="255" />
+
+							<p:outputLabel value="Enunciado"
+								for="enunciadoQDCadastroInputTextArea" />
+							<p:inputTextarea id="enunciadoQDCadastroInputTextArea"
+								value="#{questaoDissertativaBean.questaoDissertativa.enunciado}"
+								style="width: 900px; height: 50px;" required="true"
+								requiredMessage="Enunciado é obrigatório" />
+
+							<p:outputLabel value="Solução"
+								for="solucaoQDCadastroInputTextArea" />
+							<p:inputTextarea id="solucaoQDCadastroInputTextArea"
+								value="#{questaoDissertativaBean.questaoDissertativa.solucao}"
+								style="width: 900px; height: 50px;" required="true"
+								requiredMessage="Solução é obrigatório" />
+
+							<h:panelGrid columns="2">
+								<p:commandButton value="Salvar"
+									actionListener="#{questaoDissertativaBean.salvarQuestaoDissertativa}"
+									update="@form, :minhasQuestoesPesquisaForm" />
+
+								<p:commandButton value="Limpar"
+									actionListener="#{questaoDissertativaBean.limparFormCadastro}"
+									update="@form" />
+							</h:panelGrid>
+						</h:panelGrid>
+					</h:form>
+				</p:panel>
+			</h:panelGrid>
+		</p:panel>
+	</ui:define>
+</ui:composition>
+</html>

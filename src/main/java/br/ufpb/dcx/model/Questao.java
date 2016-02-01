@@ -1,6 +1,5 @@
 package br.ufpb.dcx.model;
 
-import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -19,29 +18,17 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooToString
 @RooJpaActiveRecord
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Questao implements Serializable{
+public abstract class Questao {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	protected String nome;
 
-	/**
-	 * 
-	 */
-	private String nome;
-
-	/**
-     */
 	@Lob
 	@NotNull
-	private String enunciado;
+	protected String enunciado;
 
-	/**
-     */
 	@NotNull
 	@ManyToOne
-	private Usuario professor;
+	protected Usuario professor;
 
 	public static List<Questao> pesquisarQuestoesByProfessor(
 			Usuario professorParameter, String nomeParameter) {

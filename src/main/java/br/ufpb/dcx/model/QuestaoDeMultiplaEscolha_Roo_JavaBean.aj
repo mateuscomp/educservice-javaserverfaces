@@ -4,7 +4,6 @@
 package br.ufpb.dcx.model;
 
 import br.ufpb.dcx.model.AlternativaDeQuestaoDeMultiplaEscolha;
-import br.ufpb.dcx.model.Questao;
 import br.ufpb.dcx.model.QuestaoDeMultiplaEscolha;
 import java.util.List;
 
@@ -12,14 +11,6 @@ privileged aspect QuestaoDeMultiplaEscolha_Roo_JavaBean {
     
     public void QuestaoDeMultiplaEscolha.setAlternativas(List<AlternativaDeQuestaoDeMultiplaEscolha> alternativas) {
         this.alternativas = alternativas;
-    }
-    
-    public Questao QuestaoDeMultiplaEscolha.getQuestao() {
-        return this.questao;
-    }
-    
-    public void QuestaoDeMultiplaEscolha.setQuestao(Questao questao) {
-        this.questao = questao;
     }
     
 }

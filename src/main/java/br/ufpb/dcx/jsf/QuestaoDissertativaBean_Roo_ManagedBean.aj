@@ -3,10 +3,10 @@
 
 package br.ufpb.dcx.jsf;
 
-import br.ufpb.dcx.jsf.MinhasQuestoesBean;
+import br.ufpb.dcx.jsf.QuestaoDissertativaBean;
 import br.ufpb.dcx.jsf.converter.UsuarioConverter;
 import br.ufpb.dcx.jsf.util.MessageFactory;
-import br.ufpb.dcx.model.Questao;
+import br.ufpb.dcx.model.QuestaoDissertativa;
 import br.ufpb.dcx.model.Usuario;
 import br.ufpb.dcx.service.UsuarioService;
 import java.util.ArrayList;
@@ -16,6 +16,7 @@ import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
@@ -28,99 +29,100 @@ import org.primefaces.context.RequestContext;
 import org.primefaces.event.CloseEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 
-privileged aspect MinhasQuestoesBean_Roo_ManagedBean {
+privileged aspect QuestaoDissertativaBean_Roo_ManagedBean {
     
-    declare @type: MinhasQuestoesBean: @ManagedBean(name = "minhasQuestoesBean");
+    declare @type: QuestaoDissertativaBean: @ManagedBean(name = "questaoDissertativaBean");
+    
+    declare @type: QuestaoDissertativaBean: @SessionScoped;
     
     @Autowired
-    UsuarioService MinhasQuestoesBean.usuarioService;
+    UsuarioService QuestaoDissertativaBean.usuarioService;
     
-    private String MinhasQuestoesBean.name = "Questaos";
+    private String QuestaoDissertativaBean.name = "QuestaoDissertativas";
     
-    private Questao MinhasQuestoesBean.questao;
+    private List<QuestaoDissertativa> QuestaoDissertativaBean.allQuestaoDissertativas;
     
-    private List<Questao> MinhasQuestoesBean.allQuestaos;
+    private boolean QuestaoDissertativaBean.dataVisible = false;
     
-    private boolean MinhasQuestoesBean.dataVisible = false;
+    private List<String> QuestaoDissertativaBean.columns;
     
-    private List<String> MinhasQuestoesBean.columns;
+    private HtmlPanelGrid QuestaoDissertativaBean.createPanelGrid;
     
-    private HtmlPanelGrid MinhasQuestoesBean.createPanelGrid;
+    private HtmlPanelGrid QuestaoDissertativaBean.editPanelGrid;
     
-    private HtmlPanelGrid MinhasQuestoesBean.editPanelGrid;
+    private HtmlPanelGrid QuestaoDissertativaBean.viewPanelGrid;
     
-    private HtmlPanelGrid MinhasQuestoesBean.viewPanelGrid;
-    
-    private boolean MinhasQuestoesBean.createDialogVisible = false;
+    private boolean QuestaoDissertativaBean.createDialogVisible = false;
     
     @PostConstruct
-    public void MinhasQuestoesBean.init() {
+    public void QuestaoDissertativaBean.init() {
         columns = new ArrayList<String>();
         columns.add("nome");
         columns.add("enunciado");
+        columns.add("solucao");
     }
     
-    public String MinhasQuestoesBean.getName() {
+    public String QuestaoDissertativaBean.getName() {
         return name;
     }
     
-    public List<String> MinhasQuestoesBean.getColumns() {
+    public List<String> QuestaoDissertativaBean.getColumns() {
         return columns;
     }
     
-    public List<Questao> MinhasQuestoesBean.getAllQuestaos() {
-        return allQuestaos;
+    public List<QuestaoDissertativa> QuestaoDissertativaBean.getAllQuestaoDissertativas() {
+        return allQuestaoDissertativas;
     }
     
-    public void MinhasQuestoesBean.setAllQuestaos(List<Questao> allQuestaos) {
-        this.allQuestaos = allQuestaos;
+    public void QuestaoDissertativaBean.setAllQuestaoDissertativas(List<QuestaoDissertativa> allQuestaoDissertativas) {
+        this.allQuestaoDissertativas = allQuestaoDissertativas;
     }
     
-    public String MinhasQuestoesBean.findAllQuestaos() {
-        allQuestaos = questaoService.findAllQuestaos();
-        dataVisible = !allQuestaos.isEmpty();
+    public String QuestaoDissertativaBean.findAllQuestaoDissertativas() {
+        allQuestaoDissertativas = questaoDissertativaService.findAllQuestaoDissertativas();
+        dataVisible = !allQuestaoDissertativas.isEmpty();
         return null;
     }
     
-    public boolean MinhasQuestoesBean.isDataVisible() {
+    public boolean QuestaoDissertativaBean.isDataVisible() {
         return dataVisible;
     }
     
-    public void MinhasQuestoesBean.setDataVisible(boolean dataVisible) {
+    public void QuestaoDissertativaBean.setDataVisible(boolean dataVisible) {
         this.dataVisible = dataVisible;
     }
     
-    public HtmlPanelGrid MinhasQuestoesBean.getCreatePanelGrid() {
+    public HtmlPanelGrid QuestaoDissertativaBean.getCreatePanelGrid() {
         if (createPanelGrid == null) {
             createPanelGrid = populateCreatePanel();
         }
         return createPanelGrid;
     }
     
-    public void MinhasQuestoesBean.setCreatePanelGrid(HtmlPanelGrid createPanelGrid) {
+    public void QuestaoDissertativaBean.setCreatePanelGrid(HtmlPanelGrid createPanelGrid) {
         this.createPanelGrid = createPanelGrid;
     }
     
-    public HtmlPanelGrid MinhasQuestoesBean.getEditPanelGrid() {
+    public HtmlPanelGrid QuestaoDissertativaBean.getEditPanelGrid() {
         if (editPanelGrid == null) {
             editPanelGrid = populateEditPanel();
         }
         return editPanelGrid;
     }
     
-    public void MinhasQuestoesBean.setEditPanelGrid(HtmlPanelGrid editPanelGrid) {
+    public void QuestaoDissertativaBean.setEditPanelGrid(HtmlPanelGrid editPanelGrid) {
         this.editPanelGrid = editPanelGrid;
     }
     
-    public HtmlPanelGrid MinhasQuestoesBean.getViewPanelGrid() {
+    public HtmlPanelGrid QuestaoDissertativaBean.getViewPanelGrid() {
         return populateViewPanel();
     }
     
-    public void MinhasQuestoesBean.setViewPanelGrid(HtmlPanelGrid viewPanelGrid) {
+    public void QuestaoDissertativaBean.setViewPanelGrid(HtmlPanelGrid viewPanelGrid) {
         this.viewPanelGrid = viewPanelGrid;
     }
     
-    public HtmlPanelGrid MinhasQuestoesBean.populateCreatePanel() {
+    public HtmlPanelGrid QuestaoDissertativaBean.populateCreatePanel() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         javax.faces.application.Application application = facesContext.getApplication();
         ExpressionFactory expressionFactory = application.getExpressionFactory();
@@ -136,7 +138,7 @@ privileged aspect MinhasQuestoesBean_Roo_ManagedBean {
         
         InputText nomeCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
         nomeCreateInput.setId("nomeCreateInput");
-        nomeCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{minhasQuestoesBean.questao.nome}", String.class));
+        nomeCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{questaoDissertativaBean.questaoDissertativa.nome}", String.class));
         nomeCreateInput.setRequired(false);
         htmlPanelGrid.getChildren().add(nomeCreateInput);
         
@@ -154,7 +156,7 @@ privileged aspect MinhasQuestoesBean_Roo_ManagedBean {
         
         InputTextarea enunciadoCreateInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
         enunciadoCreateInput.setId("enunciadoCreateInput");
-        enunciadoCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{minhasQuestoesBean.questao.enunciado}", String.class));
+        enunciadoCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{questaoDissertativaBean.questaoDissertativa.enunciado}", String.class));
         enunciadoCreateInput.setRequired(true);
         htmlPanelGrid.getChildren().add(enunciadoCreateInput);
         
@@ -172,8 +174,8 @@ privileged aspect MinhasQuestoesBean_Roo_ManagedBean {
         
         AutoComplete professorCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
         professorCreateInput.setId("professorCreateInput");
-        professorCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{minhasQuestoesBean.questao.professor}", Usuario.class));
-        professorCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{minhasQuestoesBean.completeProfessor}", List.class, new Class[] { String.class }));
+        professorCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{questaoDissertativaBean.questaoDissertativa.professor}", Usuario.class));
+        professorCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{questaoDissertativaBean.completeProfessor}", List.class, new Class[] { String.class }));
         professorCreateInput.setDropdown(true);
         professorCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "professor", String.class));
         professorCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{professor.nome} #{professor.nickName} #{professor.email} #{professor.senha}", String.class));
@@ -188,10 +190,28 @@ privileged aspect MinhasQuestoesBean_Roo_ManagedBean {
         professorCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(professorCreateInputMessage);
         
+        OutputLabel solucaoCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        solucaoCreateOutput.setFor("solucaoCreateInput");
+        solucaoCreateOutput.setId("solucaoCreateOutput");
+        solucaoCreateOutput.setValue("Solucao:");
+        htmlPanelGrid.getChildren().add(solucaoCreateOutput);
+        
+        InputTextarea solucaoCreateInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
+        solucaoCreateInput.setId("solucaoCreateInput");
+        solucaoCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{questaoDissertativaBean.questaoDissertativa.solucao}", String.class));
+        solucaoCreateInput.setRequired(true);
+        htmlPanelGrid.getChildren().add(solucaoCreateInput);
+        
+        Message solucaoCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        solucaoCreateInputMessage.setId("solucaoCreateInputMessage");
+        solucaoCreateInputMessage.setFor("solucaoCreateInput");
+        solucaoCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(solucaoCreateInputMessage);
+        
         return htmlPanelGrid;
     }
     
-    public HtmlPanelGrid MinhasQuestoesBean.populateEditPanel() {
+    public HtmlPanelGrid QuestaoDissertativaBean.populateEditPanel() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         javax.faces.application.Application application = facesContext.getApplication();
         ExpressionFactory expressionFactory = application.getExpressionFactory();
@@ -207,7 +227,7 @@ privileged aspect MinhasQuestoesBean_Roo_ManagedBean {
         
         InputText nomeEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
         nomeEditInput.setId("nomeEditInput");
-        nomeEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{minhasQuestoesBean.questao.nome}", String.class));
+        nomeEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{questaoDissertativaBean.questaoDissertativa.nome}", String.class));
         nomeEditInput.setRequired(false);
         htmlPanelGrid.getChildren().add(nomeEditInput);
         
@@ -225,7 +245,7 @@ privileged aspect MinhasQuestoesBean_Roo_ManagedBean {
         
         InputTextarea enunciadoEditInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
         enunciadoEditInput.setId("enunciadoEditInput");
-        enunciadoEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{minhasQuestoesBean.questao.enunciado}", String.class));
+        enunciadoEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{questaoDissertativaBean.questaoDissertativa.enunciado}", String.class));
         enunciadoEditInput.setRequired(true);
         htmlPanelGrid.getChildren().add(enunciadoEditInput);
         
@@ -243,8 +263,8 @@ privileged aspect MinhasQuestoesBean_Roo_ManagedBean {
         
         AutoComplete professorEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
         professorEditInput.setId("professorEditInput");
-        professorEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{minhasQuestoesBean.questao.professor}", Usuario.class));
-        professorEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{minhasQuestoesBean.completeProfessor}", List.class, new Class[] { String.class }));
+        professorEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{questaoDissertativaBean.questaoDissertativa.professor}", Usuario.class));
+        professorEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{questaoDissertativaBean.completeProfessor}", List.class, new Class[] { String.class }));
         professorEditInput.setDropdown(true);
         professorEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "professor", String.class));
         professorEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{professor.nome} #{professor.nickName} #{professor.email} #{professor.senha}", String.class));
@@ -259,10 +279,28 @@ privileged aspect MinhasQuestoesBean_Roo_ManagedBean {
         professorEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(professorEditInputMessage);
         
+        OutputLabel solucaoEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        solucaoEditOutput.setFor("solucaoEditInput");
+        solucaoEditOutput.setId("solucaoEditOutput");
+        solucaoEditOutput.setValue("Solucao:");
+        htmlPanelGrid.getChildren().add(solucaoEditOutput);
+        
+        InputTextarea solucaoEditInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
+        solucaoEditInput.setId("solucaoEditInput");
+        solucaoEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{questaoDissertativaBean.questaoDissertativa.solucao}", String.class));
+        solucaoEditInput.setRequired(true);
+        htmlPanelGrid.getChildren().add(solucaoEditInput);
+        
+        Message solucaoEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        solucaoEditInputMessage.setId("solucaoEditInputMessage");
+        solucaoEditInputMessage.setFor("solucaoEditInput");
+        solucaoEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(solucaoEditInputMessage);
+        
         return htmlPanelGrid;
     }
     
-    public HtmlPanelGrid MinhasQuestoesBean.populateViewPanel() {
+    public HtmlPanelGrid QuestaoDissertativaBean.populateViewPanel() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         javax.faces.application.Application application = facesContext.getApplication();
         ExpressionFactory expressionFactory = application.getExpressionFactory();
@@ -277,7 +315,7 @@ privileged aspect MinhasQuestoesBean_Roo_ManagedBean {
         
         HtmlOutputText nomeValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         nomeValue.setId("nomeValue");
-        nomeValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{minhasQuestoesBean.questao.nome}", String.class));
+        nomeValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{questaoDissertativaBean.questaoDissertativa.nome}", String.class));
         htmlPanelGrid.getChildren().add(nomeValue);
         
         HtmlOutputText enunciadoLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -287,7 +325,7 @@ privileged aspect MinhasQuestoesBean_Roo_ManagedBean {
         
         InputTextarea enunciadoValue = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
         enunciadoValue.setId("enunciadoValue");
-        enunciadoValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{minhasQuestoesBean.questao.enunciado}", String.class));
+        enunciadoValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{questaoDissertativaBean.questaoDissertativa.enunciado}", String.class));
         enunciadoValue.setReadonly(true);
         enunciadoValue.setDisabled(true);
         htmlPanelGrid.getChildren().add(enunciadoValue);
@@ -298,18 +336,26 @@ privileged aspect MinhasQuestoesBean_Roo_ManagedBean {
         htmlPanelGrid.getChildren().add(professorLabel);
         
         HtmlOutputText professorValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        professorValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{minhasQuestoesBean.questao.professor}", Usuario.class));
+        professorValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{questaoDissertativaBean.questaoDissertativa.professor}", Usuario.class));
         professorValue.setConverter(new UsuarioConverter());
         htmlPanelGrid.getChildren().add(professorValue);
+        
+        HtmlOutputText solucaoLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        solucaoLabel.setId("solucaoLabel");
+        solucaoLabel.setValue("Solucao:");
+        htmlPanelGrid.getChildren().add(solucaoLabel);
+        
+        InputTextarea solucaoValue = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
+        solucaoValue.setId("solucaoValue");
+        solucaoValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{questaoDissertativaBean.questaoDissertativa.solucao}", String.class));
+        solucaoValue.setReadonly(true);
+        solucaoValue.setDisabled(true);
+        htmlPanelGrid.getChildren().add(solucaoValue);
         
         return htmlPanelGrid;
     }
     
-    public void MinhasQuestoesBean.setQuestao(Questao questao) {
-        this.questao = questao;
-    }
-    
-    public List<Usuario> MinhasQuestoesBean.completeProfessor(String query) {
+    public List<Usuario> QuestaoDissertativaBean.completeProfessor(String query) {
         List<Usuario> suggestions = new ArrayList<Usuario>();
         for (Usuario usuario : usuarioService.findAllUsuarios()) {
             String usuarioStr = String.valueOf(usuario.getNome() +  " "  + usuario.getNickName() +  " "  + usuario.getEmail() +  " "  + usuario.getSenha());
@@ -320,57 +366,63 @@ privileged aspect MinhasQuestoesBean_Roo_ManagedBean {
         return suggestions;
     }
     
-    public String MinhasQuestoesBean.onEdit() {
+    public String QuestaoDissertativaBean.onEdit() {
         return null;
     }
     
-    public boolean MinhasQuestoesBean.isCreateDialogVisible() {
+    public boolean QuestaoDissertativaBean.isCreateDialogVisible() {
         return createDialogVisible;
     }
     
-    public void MinhasQuestoesBean.setCreateDialogVisible(boolean createDialogVisible) {
+    public void QuestaoDissertativaBean.setCreateDialogVisible(boolean createDialogVisible) {
         this.createDialogVisible = createDialogVisible;
     }
     
-    public String MinhasQuestoesBean.displayList() {
+    public String QuestaoDissertativaBean.displayList() {
         createDialogVisible = false;
-        findAllQuestaos();
-        return "questao";
+        findAllQuestaoDissertativas();
+        return "questaoDissertativa";
     }
     
-    public String MinhasQuestoesBean.persist() {
+    public String QuestaoDissertativaBean.displayCreateDialog() {
+        questaoDissertativa = new QuestaoDissertativa();
+        createDialogVisible = true;
+        return "questaoDissertativa";
+    }
+    
+    public String QuestaoDissertativaBean.persist() {
         String message = "";
-        if (questao.getId() != null) {
-            questaoService.updateQuestao(questao);
+        if (questaoDissertativa.getId() != null) {
+            questaoDissertativaService.updateQuestaoDissertativa(questaoDissertativa);
             message = "message_successfully_updated";
         } else {
-            questaoService.saveQuestao(questao);
+            questaoDissertativaService.saveQuestaoDissertativa(questaoDissertativa);
             message = "message_successfully_created";
         }
         RequestContext context = RequestContext.getCurrentInstance();
         context.execute("createDialogWidget.hide()");
         context.execute("editDialogWidget.hide()");
         
-        FacesMessage facesMessage = MessageFactory.getMessage(message, "Questao");
+        FacesMessage facesMessage = MessageFactory.getMessage(message, "QuestaoDissertativa");
         FacesContext.getCurrentInstance().addMessage(null, facesMessage);
         reset();
-        return findAllQuestaos();
+        return findAllQuestaoDissertativas();
     }
     
-    public String MinhasQuestoesBean.delete() {
-        questaoService.deleteQuestao(questao);
-        FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_deleted", "Questao");
+    public String QuestaoDissertativaBean.delete() {
+        questaoDissertativaService.deleteQuestaoDissertativa(questaoDissertativa);
+        FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_deleted", "QuestaoDissertativa");
         FacesContext.getCurrentInstance().addMessage(null, facesMessage);
         reset();
-        return findAllQuestaos();
+        return findAllQuestaoDissertativas();
     }
     
-    public void MinhasQuestoesBean.reset() {
-        questao = null;
+    public void QuestaoDissertativaBean.reset() {
+        questaoDissertativa = null;
         createDialogVisible = false;
     }
     
-    public void MinhasQuestoesBean.handleDialogClose(CloseEvent event) {
+    public void QuestaoDissertativaBean.handleDialogClose(CloseEvent event) {
         reset();
     }
     

@@ -15,6 +15,7 @@ import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
@@ -30,6 +31,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 privileged aspect ExercicioBean_Roo_ManagedBean {
     
     declare @type: ExercicioBean: @ManagedBean(name = "exercicioBean");
+    
+    declare @type: ExercicioBean: @SessionScoped;
     
     @Autowired
     UsuarioService ExercicioBean.usuarioService;

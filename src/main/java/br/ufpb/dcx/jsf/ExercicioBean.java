@@ -2,8 +2,6 @@ package br.ufpb.dcx.jsf;
 
 import java.util.List;
 
-import javax.faces.bean.ViewScoped;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
@@ -18,7 +16,6 @@ import br.ufpb.dcx.service.QuestaoService;
 
 @RooSerializable
 @RooJsfManagedBean(entity = Usuario.class, beanName = "exercicioBean")
-@ViewScoped
 public class ExercicioBean {
 
 	private static final long serialVersionUID = 1L;
@@ -79,6 +76,10 @@ public class ExercicioBean {
 		if(questoesDePesquisa == null || questoesDePesquisa.isEmpty()){
 			EducServiceJsfUtil.lancarMensagemDeAlerta("Nenhuma questão encontrada!");
 		}
+	}
+	
+	public void limpar(){
+		this.exercicio = new Exercicio();
 	}
 
 	public List<Questao> getQuestoesPesquisa() {

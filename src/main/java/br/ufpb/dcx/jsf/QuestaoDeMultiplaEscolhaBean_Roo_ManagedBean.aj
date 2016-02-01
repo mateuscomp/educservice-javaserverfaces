@@ -3,10 +3,10 @@
 
 package br.ufpb.dcx.jsf;
 
-import br.ufpb.dcx.jsf.MinhasQuestoesBean;
+import br.ufpb.dcx.jsf.QuestaoDeMultiplaEscolhaBean;
 import br.ufpb.dcx.jsf.converter.UsuarioConverter;
 import br.ufpb.dcx.jsf.util.MessageFactory;
-import br.ufpb.dcx.model.Questao;
+import br.ufpb.dcx.model.QuestaoDeMultiplaEscolha;
 import br.ufpb.dcx.model.Usuario;
 import br.ufpb.dcx.service.UsuarioService;
 import java.util.ArrayList;
@@ -16,6 +16,7 @@ import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
@@ -28,99 +29,99 @@ import org.primefaces.context.RequestContext;
 import org.primefaces.event.CloseEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 
-privileged aspect MinhasQuestoesBean_Roo_ManagedBean {
+privileged aspect QuestaoDeMultiplaEscolhaBean_Roo_ManagedBean {
     
-    declare @type: MinhasQuestoesBean: @ManagedBean(name = "minhasQuestoesBean");
+    declare @type: QuestaoDeMultiplaEscolhaBean: @ManagedBean(name = "questaoDeMultiplaEscolhaBean");
+    
+    declare @type: QuestaoDeMultiplaEscolhaBean: @SessionScoped;
     
     @Autowired
-    UsuarioService MinhasQuestoesBean.usuarioService;
+    UsuarioService QuestaoDeMultiplaEscolhaBean.usuarioService;
     
-    private String MinhasQuestoesBean.name = "Questaos";
+    private String QuestaoDeMultiplaEscolhaBean.name = "QuestaoDeMultiplaEscolhas";
     
-    private Questao MinhasQuestoesBean.questao;
+    private List<QuestaoDeMultiplaEscolha> QuestaoDeMultiplaEscolhaBean.allQuestaoDeMultiplaEscolhas;
     
-    private List<Questao> MinhasQuestoesBean.allQuestaos;
+    private boolean QuestaoDeMultiplaEscolhaBean.dataVisible = false;
     
-    private boolean MinhasQuestoesBean.dataVisible = false;
+    private List<String> QuestaoDeMultiplaEscolhaBean.columns;
     
-    private List<String> MinhasQuestoesBean.columns;
+    private HtmlPanelGrid QuestaoDeMultiplaEscolhaBean.createPanelGrid;
     
-    private HtmlPanelGrid MinhasQuestoesBean.createPanelGrid;
+    private HtmlPanelGrid QuestaoDeMultiplaEscolhaBean.editPanelGrid;
     
-    private HtmlPanelGrid MinhasQuestoesBean.editPanelGrid;
+    private HtmlPanelGrid QuestaoDeMultiplaEscolhaBean.viewPanelGrid;
     
-    private HtmlPanelGrid MinhasQuestoesBean.viewPanelGrid;
-    
-    private boolean MinhasQuestoesBean.createDialogVisible = false;
+    private boolean QuestaoDeMultiplaEscolhaBean.createDialogVisible = false;
     
     @PostConstruct
-    public void MinhasQuestoesBean.init() {
+    public void QuestaoDeMultiplaEscolhaBean.init() {
         columns = new ArrayList<String>();
         columns.add("nome");
         columns.add("enunciado");
     }
     
-    public String MinhasQuestoesBean.getName() {
+    public String QuestaoDeMultiplaEscolhaBean.getName() {
         return name;
     }
     
-    public List<String> MinhasQuestoesBean.getColumns() {
+    public List<String> QuestaoDeMultiplaEscolhaBean.getColumns() {
         return columns;
     }
     
-    public List<Questao> MinhasQuestoesBean.getAllQuestaos() {
-        return allQuestaos;
+    public List<QuestaoDeMultiplaEscolha> QuestaoDeMultiplaEscolhaBean.getAllQuestaoDeMultiplaEscolhas() {
+        return allQuestaoDeMultiplaEscolhas;
     }
     
-    public void MinhasQuestoesBean.setAllQuestaos(List<Questao> allQuestaos) {
-        this.allQuestaos = allQuestaos;
+    public void QuestaoDeMultiplaEscolhaBean.setAllQuestaoDeMultiplaEscolhas(List<QuestaoDeMultiplaEscolha> allQuestaoDeMultiplaEscolhas) {
+        this.allQuestaoDeMultiplaEscolhas = allQuestaoDeMultiplaEscolhas;
     }
     
-    public String MinhasQuestoesBean.findAllQuestaos() {
-        allQuestaos = questaoService.findAllQuestaos();
-        dataVisible = !allQuestaos.isEmpty();
+    public String QuestaoDeMultiplaEscolhaBean.findAllQuestaoDeMultiplaEscolhas() {
+        allQuestaoDeMultiplaEscolhas = questaoDeMultiplaEscolhaService.findAllQuestaoDeMultiplaEscolhas();
+        dataVisible = !allQuestaoDeMultiplaEscolhas.isEmpty();
         return null;
     }
     
-    public boolean MinhasQuestoesBean.isDataVisible() {
+    public boolean QuestaoDeMultiplaEscolhaBean.isDataVisible() {
         return dataVisible;
     }
     
-    public void MinhasQuestoesBean.setDataVisible(boolean dataVisible) {
+    public void QuestaoDeMultiplaEscolhaBean.setDataVisible(boolean dataVisible) {
         this.dataVisible = dataVisible;
     }
     
-    public HtmlPanelGrid MinhasQuestoesBean.getCreatePanelGrid() {
+    public HtmlPanelGrid QuestaoDeMultiplaEscolhaBean.getCreatePanelGrid() {
         if (createPanelGrid == null) {
             createPanelGrid = populateCreatePanel();
         }
         return createPanelGrid;
     }
     
-    public void MinhasQuestoesBean.setCreatePanelGrid(HtmlPanelGrid createPanelGrid) {
+    public void QuestaoDeMultiplaEscolhaBean.setCreatePanelGrid(HtmlPanelGrid createPanelGrid) {
         this.createPanelGrid = createPanelGrid;
     }
     
-    public HtmlPanelGrid MinhasQuestoesBean.getEditPanelGrid() {
+    public HtmlPanelGrid QuestaoDeMultiplaEscolhaBean.getEditPanelGrid() {
         if (editPanelGrid == null) {
             editPanelGrid = populateEditPanel();
         }
         return editPanelGrid;
     }
     
-    public void MinhasQuestoesBean.setEditPanelGrid(HtmlPanelGrid editPanelGrid) {
+    public void QuestaoDeMultiplaEscolhaBean.setEditPanelGrid(HtmlPanelGrid editPanelGrid) {
         this.editPanelGrid = editPanelGrid;
     }
     
-    public HtmlPanelGrid MinhasQuestoesBean.getViewPanelGrid() {
+    public HtmlPanelGrid QuestaoDeMultiplaEscolhaBean.getViewPanelGrid() {
         return populateViewPanel();
     }
     
-    public void MinhasQuestoesBean.setViewPanelGrid(HtmlPanelGrid viewPanelGrid) {
+    public void QuestaoDeMultiplaEscolhaBean.setViewPanelGrid(HtmlPanelGrid viewPanelGrid) {
         this.viewPanelGrid = viewPanelGrid;
     }
     
-    public HtmlPanelGrid MinhasQuestoesBean.populateCreatePanel() {
+    public HtmlPanelGrid QuestaoDeMultiplaEscolhaBean.populateCreatePanel() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         javax.faces.application.Application application = facesContext.getApplication();
         ExpressionFactory expressionFactory = application.getExpressionFactory();
@@ -136,7 +137,7 @@ privileged aspect MinhasQuestoesBean_Roo_ManagedBean {
         
         InputText nomeCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
         nomeCreateInput.setId("nomeCreateInput");
-        nomeCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{minhasQuestoesBean.questao.nome}", String.class));
+        nomeCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{questaoDeMultiplaEscolhaBean.questaoDeMultiplaEscolha.nome}", String.class));
         nomeCreateInput.setRequired(false);
         htmlPanelGrid.getChildren().add(nomeCreateInput);
         
@@ -154,7 +155,7 @@ privileged aspect MinhasQuestoesBean_Roo_ManagedBean {
         
         InputTextarea enunciadoCreateInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
         enunciadoCreateInput.setId("enunciadoCreateInput");
-        enunciadoCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{minhasQuestoesBean.questao.enunciado}", String.class));
+        enunciadoCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{questaoDeMultiplaEscolhaBean.questaoDeMultiplaEscolha.enunciado}", String.class));
         enunciadoCreateInput.setRequired(true);
         htmlPanelGrid.getChildren().add(enunciadoCreateInput);
         
@@ -172,8 +173,8 @@ privileged aspect MinhasQuestoesBean_Roo_ManagedBean {
         
         AutoComplete professorCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
         professorCreateInput.setId("professorCreateInput");
-        professorCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{minhasQuestoesBean.questao.professor}", Usuario.class));
-        professorCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{minhasQuestoesBean.completeProfessor}", List.class, new Class[] { String.class }));
+        professorCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{questaoDeMultiplaEscolhaBean.questaoDeMultiplaEscolha.professor}", Usuario.class));
+        professorCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{questaoDeMultiplaEscolhaBean.completeProfessor}", List.class, new Class[] { String.class }));
         professorCreateInput.setDropdown(true);
         professorCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "professor", String.class));
         professorCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{professor.nome} #{professor.nickName} #{professor.email} #{professor.senha}", String.class));
@@ -188,10 +189,28 @@ privileged aspect MinhasQuestoesBean_Roo_ManagedBean {
         professorCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(professorCreateInputMessage);
         
+        OutputLabel alternativasCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        alternativasCreateOutput.setFor("alternativasCreateInput");
+        alternativasCreateOutput.setId("alternativasCreateOutput");
+        alternativasCreateOutput.setValue("Alternativas:");
+        htmlPanelGrid.getChildren().add(alternativasCreateOutput);
+        
+        InputText alternativasCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        alternativasCreateInput.setId("alternativasCreateInput");
+        alternativasCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{questaoDeMultiplaEscolhaBean.questaoDeMultiplaEscolha.alternativas}", List.class));
+        alternativasCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(alternativasCreateInput);
+        
+        Message alternativasCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        alternativasCreateInputMessage.setId("alternativasCreateInputMessage");
+        alternativasCreateInputMessage.setFor("alternativasCreateInput");
+        alternativasCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(alternativasCreateInputMessage);
+        
         return htmlPanelGrid;
     }
     
-    public HtmlPanelGrid MinhasQuestoesBean.populateEditPanel() {
+    public HtmlPanelGrid QuestaoDeMultiplaEscolhaBean.populateEditPanel() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         javax.faces.application.Application application = facesContext.getApplication();
         ExpressionFactory expressionFactory = application.getExpressionFactory();
@@ -207,7 +226,7 @@ privileged aspect MinhasQuestoesBean_Roo_ManagedBean {
         
         InputText nomeEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
         nomeEditInput.setId("nomeEditInput");
-        nomeEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{minhasQuestoesBean.questao.nome}", String.class));
+        nomeEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{questaoDeMultiplaEscolhaBean.questaoDeMultiplaEscolha.nome}", String.class));
         nomeEditInput.setRequired(false);
         htmlPanelGrid.getChildren().add(nomeEditInput);
         
@@ -225,7 +244,7 @@ privileged aspect MinhasQuestoesBean_Roo_ManagedBean {
         
         InputTextarea enunciadoEditInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
         enunciadoEditInput.setId("enunciadoEditInput");
-        enunciadoEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{minhasQuestoesBean.questao.enunciado}", String.class));
+        enunciadoEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{questaoDeMultiplaEscolhaBean.questaoDeMultiplaEscolha.enunciado}", String.class));
         enunciadoEditInput.setRequired(true);
         htmlPanelGrid.getChildren().add(enunciadoEditInput);
         
@@ -243,8 +262,8 @@ privileged aspect MinhasQuestoesBean_Roo_ManagedBean {
         
         AutoComplete professorEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
         professorEditInput.setId("professorEditInput");
-        professorEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{minhasQuestoesBean.questao.professor}", Usuario.class));
-        professorEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{minhasQuestoesBean.completeProfessor}", List.class, new Class[] { String.class }));
+        professorEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{questaoDeMultiplaEscolhaBean.questaoDeMultiplaEscolha.professor}", Usuario.class));
+        professorEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{questaoDeMultiplaEscolhaBean.completeProfessor}", List.class, new Class[] { String.class }));
         professorEditInput.setDropdown(true);
         professorEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "professor", String.class));
         professorEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{professor.nome} #{professor.nickName} #{professor.email} #{professor.senha}", String.class));
@@ -259,10 +278,28 @@ privileged aspect MinhasQuestoesBean_Roo_ManagedBean {
         professorEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(professorEditInputMessage);
         
+        OutputLabel alternativasEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        alternativasEditOutput.setFor("alternativasEditInput");
+        alternativasEditOutput.setId("alternativasEditOutput");
+        alternativasEditOutput.setValue("Alternativas:");
+        htmlPanelGrid.getChildren().add(alternativasEditOutput);
+        
+        InputText alternativasEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        alternativasEditInput.setId("alternativasEditInput");
+        alternativasEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{questaoDeMultiplaEscolhaBean.questaoDeMultiplaEscolha.alternativas}", List.class));
+        alternativasEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(alternativasEditInput);
+        
+        Message alternativasEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        alternativasEditInputMessage.setId("alternativasEditInputMessage");
+        alternativasEditInputMessage.setFor("alternativasEditInput");
+        alternativasEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(alternativasEditInputMessage);
+        
         return htmlPanelGrid;
     }
     
-    public HtmlPanelGrid MinhasQuestoesBean.populateViewPanel() {
+    public HtmlPanelGrid QuestaoDeMultiplaEscolhaBean.populateViewPanel() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         javax.faces.application.Application application = facesContext.getApplication();
         ExpressionFactory expressionFactory = application.getExpressionFactory();
@@ -277,7 +314,7 @@ privileged aspect MinhasQuestoesBean_Roo_ManagedBean {
         
         HtmlOutputText nomeValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         nomeValue.setId("nomeValue");
-        nomeValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{minhasQuestoesBean.questao.nome}", String.class));
+        nomeValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{questaoDeMultiplaEscolhaBean.questaoDeMultiplaEscolha.nome}", String.class));
         htmlPanelGrid.getChildren().add(nomeValue);
         
         HtmlOutputText enunciadoLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -287,7 +324,7 @@ privileged aspect MinhasQuestoesBean_Roo_ManagedBean {
         
         InputTextarea enunciadoValue = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
         enunciadoValue.setId("enunciadoValue");
-        enunciadoValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{minhasQuestoesBean.questao.enunciado}", String.class));
+        enunciadoValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{questaoDeMultiplaEscolhaBean.questaoDeMultiplaEscolha.enunciado}", String.class));
         enunciadoValue.setReadonly(true);
         enunciadoValue.setDisabled(true);
         htmlPanelGrid.getChildren().add(enunciadoValue);
@@ -298,18 +335,23 @@ privileged aspect MinhasQuestoesBean_Roo_ManagedBean {
         htmlPanelGrid.getChildren().add(professorLabel);
         
         HtmlOutputText professorValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        professorValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{minhasQuestoesBean.questao.professor}", Usuario.class));
+        professorValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{questaoDeMultiplaEscolhaBean.questaoDeMultiplaEscolha.professor}", Usuario.class));
         professorValue.setConverter(new UsuarioConverter());
         htmlPanelGrid.getChildren().add(professorValue);
+        
+        HtmlOutputText alternativasLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        alternativasLabel.setId("alternativasLabel");
+        alternativasLabel.setValue("Alternativas:");
+        htmlPanelGrid.getChildren().add(alternativasLabel);
+        
+        HtmlOutputText alternativasValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        alternativasValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{questaoDeMultiplaEscolhaBean.questaoDeMultiplaEscolha.alternativas}", String.class));
+        htmlPanelGrid.getChildren().add(alternativasValue);
         
         return htmlPanelGrid;
     }
     
-    public void MinhasQuestoesBean.setQuestao(Questao questao) {
-        this.questao = questao;
-    }
-    
-    public List<Usuario> MinhasQuestoesBean.completeProfessor(String query) {
+    public List<Usuario> QuestaoDeMultiplaEscolhaBean.completeProfessor(String query) {
         List<Usuario> suggestions = new ArrayList<Usuario>();
         for (Usuario usuario : usuarioService.findAllUsuarios()) {
             String usuarioStr = String.valueOf(usuario.getNome() +  " "  + usuario.getNickName() +  " "  + usuario.getEmail() +  " "  + usuario.getSenha());
@@ -320,57 +362,63 @@ privileged aspect MinhasQuestoesBean_Roo_ManagedBean {
         return suggestions;
     }
     
-    public String MinhasQuestoesBean.onEdit() {
+    public String QuestaoDeMultiplaEscolhaBean.onEdit() {
         return null;
     }
     
-    public boolean MinhasQuestoesBean.isCreateDialogVisible() {
+    public boolean QuestaoDeMultiplaEscolhaBean.isCreateDialogVisible() {
         return createDialogVisible;
     }
     
-    public void MinhasQuestoesBean.setCreateDialogVisible(boolean createDialogVisible) {
+    public void QuestaoDeMultiplaEscolhaBean.setCreateDialogVisible(boolean createDialogVisible) {
         this.createDialogVisible = createDialogVisible;
     }
     
-    public String MinhasQuestoesBean.displayList() {
+    public String QuestaoDeMultiplaEscolhaBean.displayList() {
         createDialogVisible = false;
-        findAllQuestaos();
-        return "questao";
+        findAllQuestaoDeMultiplaEscolhas();
+        return "questaoDeMultiplaEscolha";
     }
     
-    public String MinhasQuestoesBean.persist() {
+    public String QuestaoDeMultiplaEscolhaBean.displayCreateDialog() {
+        questaoDeMultiplaEscolha = new QuestaoDeMultiplaEscolha();
+        createDialogVisible = true;
+        return "questaoDeMultiplaEscolha";
+    }
+    
+    public String QuestaoDeMultiplaEscolhaBean.persist() {
         String message = "";
-        if (questao.getId() != null) {
-            questaoService.updateQuestao(questao);
+        if (questaoDeMultiplaEscolha.getId() != null) {
+            questaoDeMultiplaEscolhaService.updateQuestaoDeMultiplaEscolha(questaoDeMultiplaEscolha);
             message = "message_successfully_updated";
         } else {
-            questaoService.saveQuestao(questao);
+            questaoDeMultiplaEscolhaService.saveQuestaoDeMultiplaEscolha(questaoDeMultiplaEscolha);
             message = "message_successfully_created";
         }
         RequestContext context = RequestContext.getCurrentInstance();
         context.execute("createDialogWidget.hide()");
         context.execute("editDialogWidget.hide()");
         
-        FacesMessage facesMessage = MessageFactory.getMessage(message, "Questao");
+        FacesMessage facesMessage = MessageFactory.getMessage(message, "QuestaoDeMultiplaEscolha");
         FacesContext.getCurrentInstance().addMessage(null, facesMessage);
         reset();
-        return findAllQuestaos();
+        return findAllQuestaoDeMultiplaEscolhas();
     }
     
-    public String MinhasQuestoesBean.delete() {
-        questaoService.deleteQuestao(questao);
-        FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_deleted", "Questao");
+    public String QuestaoDeMultiplaEscolhaBean.delete() {
+        questaoDeMultiplaEscolhaService.deleteQuestaoDeMultiplaEscolha(questaoDeMultiplaEscolha);
+        FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_deleted", "QuestaoDeMultiplaEscolha");
         FacesContext.getCurrentInstance().addMessage(null, facesMessage);
         reset();
-        return findAllQuestaos();
+        return findAllQuestaoDeMultiplaEscolhas();
     }
     
-    public void MinhasQuestoesBean.reset() {
-        questao = null;
+    public void QuestaoDeMultiplaEscolhaBean.reset() {
+        questaoDeMultiplaEscolha = null;
         createDialogVisible = false;
     }
     
-    public void MinhasQuestoesBean.handleDialogClose(CloseEvent event) {
+    public void QuestaoDeMultiplaEscolhaBean.handleDialogClose(CloseEvent event) {
         reset();
     }
     

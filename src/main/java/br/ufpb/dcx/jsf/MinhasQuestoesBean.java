@@ -69,15 +69,12 @@ public class MinhasQuestoesBean implements Serializable {
 		this.professor = EducServiceJsfUtil.getUsuarioDaSession();
 
 		this.questaoDeMultiplaEscolha = new QuestaoDeMultiplaEscolha();
-		this.questaoDeMultiplaEscolha.setQuestao(new Questao());
 		this.alternativaDeQuestaoDeMultiplaEscolha = new AlternativaDeQuestaoDeMultiplaEscolha();
 		this.alternativasDeQuestaoDeMultiplaEscolhaRemovidas = new ArrayList<AlternativaDeQuestaoDeMultiplaEscolha>();
 
 		this.questaoDissertativa = new QuestaoDissertativa();
-		this.questaoDissertativa.setQuestao(new Questao());
 
 		this.questaoVerdadeiroOuFalso = new QuestaoVouF();
-		this.questaoVerdadeiroOuFalso.setQuestao(new Questao());
 		this.alternativaVerdadeiroOuFalso = new AlternativaVouF();
 		this.alternativasDeQuestaoVouFRemovidas = new ArrayList<AlternativaVouF>();
 
@@ -99,48 +96,31 @@ public class MinhasQuestoesBean implements Serializable {
 	}
 
 	public void editar(Questao questao) {
-
-		QuestaoDeMultiplaEscolha questaoMEEdicao = this.questaoDeMultiplaEscolhaService
-				.pesquisarPorIdDeQuestao(questao);
-		if (questaoMEEdicao != null) {
-			indexTabView = mapQuestaoTab.get(questaoMEEdicao.getClass());
-			this.questaoDeMultiplaEscolha = questaoMEEdicao;
-
-			this.questaoDissertativa = new QuestaoDissertativa();
-			this.questaoDissertativa.setQuestao(new Questao());
-
-			this.questaoVerdadeiroOuFalso = new QuestaoVouF();
-			this.questaoVerdadeiroOuFalso.setQuestao(new Questao());
-
-			return;
-		}
-
-		QuestaoDissertativa questaoDEdicao = this.questaoDissertativaService
-				.pesquisarPorIdDeQuestao(questao);
-		if (questaoDEdicao != null) {
-			indexTabView = mapQuestaoTab.get(questaoDEdicao.getClass());
-			this.questaoDissertativa = questaoDEdicao;
-
-			this.questaoDeMultiplaEscolha = new QuestaoDeMultiplaEscolha();
-			this.questaoDeMultiplaEscolha.setQuestao(new Questao());
-
-			this.questaoVerdadeiroOuFalso = new QuestaoVouF();
-			this.questaoVerdadeiroOuFalso.setQuestao(new Questao());
-
-			return;
-		}
-
-		QuestaoVouF questaoVFEdicao = this.questaoVouFService
-				.pesquisarPorIdDeQuestao(questao);
-		if (questaoVFEdicao != null) {
-			indexTabView = mapQuestaoTab.get(questaoVFEdicao.getClass());
-			this.questaoVerdadeiroOuFalso = questaoVFEdicao;
-
-			this.questaoDeMultiplaEscolha = new QuestaoDeMultiplaEscolha();
-			this.questaoDeMultiplaEscolha.setQuestao(new Questao());
+		if (questao instanceof QuestaoDeMultiplaEscolha) {
+			this.questaoDeMultiplaEscolha = this.questaoDeMultiplaEscolhaService
+					.pesquisarPorIdDeQuestao(questao);
+			indexTabView = mapQuestaoTab.get(questaoDeMultiplaEscolha
+					.getClass());
 
 			this.questaoDissertativa = new QuestaoDissertativa();
-			this.questaoDissertativa.setQuestao(new Questao());
+			this.questaoVerdadeiroOuFalso = new QuestaoVouF();
+
+		} else if (questao instanceof QuestaoDissertativa) {
+			this.questaoDissertativa = this.questaoDissertativaService
+					.pesquisarPorIdDeQuestao(questao);
+			indexTabView = mapQuestaoTab.get(questaoDissertativa.getClass());
+
+			this.questaoDeMultiplaEscolha = new QuestaoDeMultiplaEscolha();
+			this.questaoVerdadeiroOuFalso = new QuestaoVouF();
+		}
+
+		else if (questao instanceof QuestaoVouF) {
+			this.questaoVerdadeiroOuFalso = this.questaoVouFService
+					.pesquisarPorIdDeQuestao(questao);
+			indexTabView = mapQuestaoTab.get(questaoVerdadeiroOuFalso.getClass());
+
+			this.questaoDeMultiplaEscolha = new QuestaoDeMultiplaEscolha();
+			this.questaoDissertativa = new QuestaoDissertativa();
 		} else {
 			EducServiceJsfUtil.lancarMensagemDeErro("Questão não encontrada!");
 		}
@@ -182,17 +162,14 @@ public class MinhasQuestoesBean implements Serializable {
 	}
 
 	public void salvarQuestaoDeMultiplaEscolha() {
-		this.questaoDeMultiplaEscolha.getQuestao().setProfessor(professor);
+		this.questaoDeMultiplaEscolha.setProfessor(professor);
 		try {
-			this.questaoService.salvarQuestao(this.questaoDeMultiplaEscolha
-					.getQuestao());
 			this.questaoDeMultiplaEscolhaService
 					.salvarQuestaoDeMultiplaEscolha(
 							this.questaoDeMultiplaEscolha,
 							alternativasDeQuestaoDeMultiplaEscolhaRemovidas);
 
 			this.questaoDeMultiplaEscolha = new QuestaoDeMultiplaEscolha();
-			this.questaoDeMultiplaEscolha.setQuestao(new Questao());
 
 			EducServiceJsfUtil
 					.lancarMensagemInformativa("Questão de Múltipla Escolha salva com sucesso!");
@@ -202,30 +179,23 @@ public class MinhasQuestoesBean implements Serializable {
 	}
 
 	public void salvarQuestaoDissertativa() {
-		this.questaoDissertativa.getQuestao().setProfessor(professor);
-
-		this.questaoService
-				.salvarQuestao(this.questaoDissertativa.getQuestao());
+		this.questaoDissertativa.setProfessor(professor);
 		this.questaoDissertativaService
 				.salvarQuestaoDissertativa(questaoDissertativa);
 
 		this.questaoDissertativa = new QuestaoDissertativa();
-		this.questaoDissertativa.setQuestao(new Questao());
 
 		EducServiceJsfUtil
 				.lancarMensagemInformativa("Questão Dissertativa salva com sucesso!");
 	}
 
 	public void salvarQuestaoVouF() {
-		this.questaoVerdadeiroOuFalso.getQuestao().setProfessor(professor);
-		this.questaoService.salvarQuestao(this.questaoVerdadeiroOuFalso
-				.getQuestao());
+		this.questaoVerdadeiroOuFalso.setProfessor(professor);
 		try {
 			this.questaoVouFService.salvarQuestaoVouF(questaoVerdadeiroOuFalso,
 					alternativasDeQuestaoVouFRemovidas);
 
 			this.questaoVerdadeiroOuFalso = new QuestaoVouF();
-			this.questaoVerdadeiroOuFalso.setQuestao(new Questao());
 
 			EducServiceJsfUtil
 					.lancarMensagemInformativa("Questão de Verdadeiro ou Falso salva com sucesso!");
@@ -333,5 +303,13 @@ public class MinhasQuestoesBean implements Serializable {
 
 	public void setIndexTabView(Integer indexTabView) {
 		this.indexTabView = indexTabView;
+	}
+
+	public Questao getQuestao() {
+		return this.questaoSelecionada;
+	}
+
+	public String displayCreateDialog() {
+		return "questao";
 	}
 }
