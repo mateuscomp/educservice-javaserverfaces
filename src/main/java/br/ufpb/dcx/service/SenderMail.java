@@ -25,7 +25,7 @@ public class SenderMail {
 	private static final String LOGIN_REGEX = "#LOGIN_DO_USUARIO";
 	private static final String SENHA_REGEX = "#SENHA_DO_USUARIO";
 
-	private static final String SUBJECT_EMAIL_CADASTRO_ALUNO = "[EducService] - Cadastro de Aluno";
+	private static final String SUBJECT_EMAIL_CADASTRO_ALUNO = "[EducService] - Cadastro de Usuário";
 	private static final String SUBJECT_EMAIL_RECUPERACAO_SENHA = "[EducService] - Recuperação de Senha";
 
 	private String corpoDoEmailCadastroUsuario = "<html>"
