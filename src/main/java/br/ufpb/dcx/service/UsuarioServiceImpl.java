@@ -11,10 +11,10 @@ public class UsuarioServiceImpl implements UsuarioService, Serializable {
 
 	@Override
 	public void salvar(Usuario usuario) throws EducServiceException {
-		
 		Usuario usuarioComMesmoEmailOuMesmoNickName = Usuario
 				.findUsuarioByNickNameOrEmailEquals(usuario.getNickName()
 						.toLowerCase(), usuario.getEmail().toLowerCase());
+
 		if (usuarioComMesmoEmailOuMesmoNickName != null) {
 			if (usuarioComMesmoEmailOuMesmoNickName.getNickName().equals(
 					usuario.getNickName().toLowerCase())) {
@@ -31,12 +31,14 @@ public class UsuarioServiceImpl implements UsuarioService, Serializable {
 
 		EducServiceException exception = null;
 		if (usuario.getId() == null) {
-			this.gerarSenhaDeRecuperacao(usuario);
-			try{
+			String senhaGerada = this.gerarSenhaAleatoria();
+			usuario.setSenha(senhaGerada);
+			usuario.setSenhaDeRecuperacao(senhaGerada);
+			try {
 				SenderMail senderMail = new SenderMail();
 				senderMail.enviarEmailComSenhaGerada(usuario);
-			} catch(EducServiceException e){
-				exception  = e;
+			} catch (EducServiceException e) {
+				exception = e;
 			}
 		}
 
@@ -47,13 +49,13 @@ public class UsuarioServiceImpl implements UsuarioService, Serializable {
 		usuario.setSenhaDeRecuperacao(usuario.getSenhaDeRecuperacao()
 				.toLowerCase());
 		this.saveUsuario(usuario);
-		
-		if(exception != null){
+
+		if (exception != null) {
 			throw exception;
 		}
 	}
 
-	private void gerarSenhaDeRecuperacao(Usuario usuario) {
+	private String gerarSenhaAleatoria() {
 		char[] alfabeto = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K',
 				'L', 'M', 'N', 'P', 'Q', 'R', 'T', 'V', 'W', 'X', 'Y', 'Z',
 				'2', '3', '4', '6', '7', '8', '9' };
@@ -68,8 +70,7 @@ public class UsuarioServiceImpl implements UsuarioService, Serializable {
 			}
 			codigo += alfabeto[numero];
 		}
-		usuario.setSenha(codigo);
-		usuario.setSenhaDeRecuperacao(codigo);
+		return codigo.toLowerCase();
 	}
 
 	@Override
@@ -80,7 +81,25 @@ public class UsuarioServiceImpl implements UsuarioService, Serializable {
 	@Override
 	public Usuario pesquisarUsuarioPorEmailOrNickNameAndSenha(String login,
 			String senha) {
-		
-		return Usuario.findUsuarioByEmailOrNickNameEqualsAndSenhaEquals(login, senha);
+
+		return Usuario.findUsuarioByEmailOrNickNameEqualsAndSenhaEquals(login,
+				senha);
+	}
+
+	@Override
+	public Usuario recuperarSenha(String nickname, String email)
+			throws EducServiceException {
+
+		Usuario usuario = Usuario.findUsuarioByNickNameOrEmailEquals(nickname,
+				email);
+		if (usuario != null) {
+			usuario.setSenhaDeRecuperacao(gerarSenhaAleatoria());
+			SenderMail senderMail = new SenderMail();
+			senderMail.enviarEmailComRecuperacaoDeSenha(usuario);
+		} else {
+			throw new EducServiceException("Usuário não encontrado!");
+		}
+
+		return usuario;
 	}
 }

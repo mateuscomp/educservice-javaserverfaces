@@ -5,7 +5,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 
-<ui:composition template="../../templates/private/layout.xhtml">
+<ui:composition template="../../../templates/private/layout.xhtml">
 	<ui:define name="content">
 		<p:panel id="panel">
 			<h1>Questão de Múlipla Escolha</h1>
@@ -18,6 +18,8 @@
 					style="margin-bottom:20px; width: 970px">
 
 					<h:form id="minhasQuestoesPesquisaForm">
+						<p:ajaxStatus onstart="statusDialog.show();"
+							onsuccess="statusDialog.hide();" />
 						<p:growl id="growlPesquisa" />
 
 						<h:panelGrid>
@@ -71,6 +73,8 @@
 					toggleOrientation="vertical"
 					style="margin-bottom:20px; width: 970px">
 					<h:form id="formCadastroQME">
+						<p:ajaxStatus onstart="statusDialog.show();"
+							onsuccess="statusDialog.hide();" />
 						<p:growl id="growlQME" />
 
 						<h:panelGrid cellpadding="3">
@@ -105,7 +109,8 @@
 											value="#{questaoDeMultiplaEscolhaBean.alternativaDeQuestaoDeMultiplaEscolha.alternativaCorreta}" />
 									</h:panelGrid>
 
-									<p:commandButton value="Adicionar alternativa" icon="ui-icon-plus"
+									<p:commandButton value="Adicionar alternativa"
+										icon="ui-icon-plus"
 										actionListener="#{questaoDeMultiplaEscolhaBean.adicionarAlternativaQME}"
 										process="alternativaDaQuestaoMEInputText, alternativaCorretaDaQuestaoMEInputText"
 										update="alternativaDaQuestaoMEInputText alternativaCorretaDaQuestaoMEInputText, alternativasDataTable, growlQME" />
@@ -157,6 +162,12 @@
 				</p:panel>
 			</h:panelGrid>
 		</p:panel>
+
+		<p:dialog modal="true" resizable="false" header="Aguarde"
+			widgetVar="statusDialog" draggable="false" closable="false">
+			<h:graphicImage
+				url="https://s3-us-west-2.amazonaws.com/educservicebucket/images/carregando.gif" />
+		</p:dialog>
 	</ui:define>
 </ui:composition>
 </html>

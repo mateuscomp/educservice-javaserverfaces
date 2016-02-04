@@ -3,3 +3,7 @@
 .settings/
 target/
 bin/
+src/main/java/br/ufpb/dcx/model/*.aj
+src/main/java/br/ufpb/dcx/jsf/*.aj
+src/main/java/br/ufpb/dcx/jsf/converter/*.aj
+src/main/java/br/ufpb/dcx/service/*.aj

@@ -19,9 +19,6 @@ import br.ufpb.dcx.service.UsuarioService;
 @ViewScoped
 public class UsuarioBean {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	private String nome;
@@ -58,7 +55,7 @@ public class UsuarioBean {
 				EducServiceJsfUtil
 						.lancarMensagemDeErro("Nickname já cadastrado");
 			} else {
-				EducServiceJsfUtil.lancarMensagemDeErro("Nickname disponível");
+				EducServiceJsfUtil.lancarMensagemInformativa("Nickname disponível");
 			}
 		}
 	}

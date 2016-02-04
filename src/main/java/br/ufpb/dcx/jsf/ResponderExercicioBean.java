@@ -1,6 +1,5 @@
 package br.ufpb.dcx.jsf;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,9 +37,7 @@ import br.ufpb.dcx.service.RespostaDeQuestaoDissertativaService;
 
 @RooSerializable
 @RooJsfManagedBean(entity = RespostaDeExercicio.class, beanName = "responderExercicioBean")
-public class ResponderExercicioBean implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class ResponderExercicioBean {
 
 	@Autowired
 	private ExercicioService exercicioService;
@@ -246,10 +243,9 @@ public class ResponderExercicioBean implements Serializable {
 	}
 
 	private void selecionarQuestao(Questao questao) {
-		QuestaoDeMultiplaEscolha questaoMEEdicao = this.questaoDeMultiplaEscolhaService
-				.pesquisarPorIdDeQuestao(questao);
-		if (questaoMEEdicao != null) {
-			this.questaoDeMultiplaEscolha = questaoMEEdicao;
+
+		if (questao instanceof QuestaoDeMultiplaEscolha) {
+			this.questaoDeMultiplaEscolha = (QuestaoDeMultiplaEscolha) questao;
 
 			this.questaoDissertativa = null;
 			this.respostaDeQuestaoDissertativa = null;
@@ -259,13 +255,10 @@ public class ResponderExercicioBean implements Serializable {
 
 			this.respostaDeQuestaoDeMultiplaEscolha = new RespostaDeQuestaoDeMultiplaEscolha();
 			this.respostaDeQuestaoDeMultiplaEscolha.setRespostaDeQuestaoDeUmExercicio(this.respostaDeQuestao);
-
-			return;
-		}
-
-		QuestaoDissertativa questaoDEdicao = this.questaoDissertativaService.pesquisarPorIdDeQuestao(questao);
-		if (questaoDEdicao != null) {
-			this.questaoDissertativa = questaoDEdicao;
+		} 
+		
+		else if (questao instanceof QuestaoDissertativa){
+			this.questaoDissertativa = (QuestaoDissertativa) questao;
 
 			this.questaoDeMultiplaEscolha = null;
 			this.respostaDeQuestaoDeMultiplaEscolha = null;
@@ -275,13 +268,8 @@ public class ResponderExercicioBean implements Serializable {
 
 			this.respostaDeQuestaoDissertativa = new RespostaDeQuestaoDissertativa();
 			this.respostaDeQuestaoDissertativa.setRespostaDeQuestaoDeUmExercicio(this.respostaDeQuestao);
-
-			return;
-		}
-
-		QuestaoVouF questaoVFEdicao = this.questaoVouFService.pesquisarPorIdDeQuestao(questao);
-		if (questaoVFEdicao != null) {
-			this.questaoVouF = questaoVFEdicao;
+		} else if(questao instanceof QuestaoVouF){
+			this.questaoVouF = (QuestaoVouF) questao;
 
 			this.questaoDeMultiplaEscolha = null;
 			this.respostaDeQuestaoDeMultiplaEscolha = null;

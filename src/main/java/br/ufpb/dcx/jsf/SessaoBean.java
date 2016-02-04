@@ -6,6 +6,7 @@ import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
 import br.ufpb.dcx.jsf.util.EducServiceJsfUtil;
+import br.ufpb.dcx.model.PerfilEnum;
 import br.ufpb.dcx.model.Usuario;
 
 @RooSerializable
@@ -43,13 +44,15 @@ public class SessaoBean implements Serializable{
 	}
 	
 	public void sair(){
+		usuario = null;
 		EducServiceJsfUtil.removerUsuarioDaSessao();
-		
-//		System.out.println("############################################...");
-//		System.out.println("Chamou logoff...");
-//		System.out.println("############################################...");
-	
-//		return "/main.jsf";
 	}
 	
+	public boolean getUsuarioEhAluno(){
+		return usuario != null && PerfilEnum.ALUNO.equals(usuario.getPerfil());
+	}
+	
+	public boolean getUsuarioEhProfessor(){
+		return usuario != null && PerfilEnum.PROFESSOR.equals(usuario.getPerfil());
+	}
 }

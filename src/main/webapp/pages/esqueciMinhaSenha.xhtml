@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="../templates/public/layout.xhtml">
+	<ui:define name="content">
+		<p:panel id="mainPanel">
+			<h:form>
+				<p:growl id="growl" />
+
+				<h:panelGrid columns="4">
+					<p:spacer height="1" width="50" />
+
+					<h1>EducService</h1>
+
+					<p:spacer height="1" width="330" />
+
+				</h:panelGrid>
+			</h:form>
+		</p:panel>
+
+		<p:separator style="margin:10px;" />
+
+		<p:panel id="painelCadastro">
+			<h1>Esqueci Minha Senha</h1>
+
+			<p:panel>
+				<h:form>
+					<p:ajaxStatus onstart="statusDialog.show();"
+						onsuccess="statusDialog.hide();" />
+
+					<p:growl id="growl" />
+
+					<h:panelGrid>
+						<h:panelGrid>
+							<p:outputLabel for="nicknameInputText" value="Nickname" />
+							<p:inputText id="nicknameInputText"
+								value="#{esqueciMinhaSenhaBean.nickname}"
+								requiredMessage="Nickname completo é obrigatório"
+								required="true" style="width: 350px" />
+						</h:panelGrid>
+
+						<h:panelGrid>
+							<p:outputLabel for="emailUsuarioInputText" value="E-mail" />
+							<p:inputText id="emailUsuarioInputText"
+								requiredMessage="E-mail é obrigatório"
+								value="#{esqueciMinhaSenhaBean.email}" required="true"
+								style="width: 350px" />
+						</h:panelGrid>
+
+						<h:panelGrid>
+							<p:commandButton value="Gerar Nova Senha" update="growl"
+								action="#{esqueciMinhaSenhaBean.recuperarSenha}" />
+							
+							<a href="main.jsf" id="linkPaginaInicial"
+								style="font-size: 12px;">Página inicial</a>
+						</h:panelGrid>
+					</h:panelGrid>
+				</h:form>
+				
+			</p:panel>
+		</p:panel>
+
+		<p:dialog modal="true" resizable="false" header="Aguarde"
+			widgetVar="statusDialog" draggable="false" closable="false">
+			<h:graphicImage
+				url="https://s3-us-west-2.amazonaws.com/educservicebucket/images/carregando.gif" />
+		</p:dialog>
+	</ui:define>
+</ui:composition>
+</html>

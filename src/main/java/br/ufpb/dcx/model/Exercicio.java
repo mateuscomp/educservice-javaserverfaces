@@ -4,16 +4,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.EntityManager;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
-import javax.persistence.Query;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
@@ -41,6 +37,15 @@ public class Exercicio implements Serializable {
 	@DateTimeFormat(style = "M-")
 	private Date dataDeVencimento;
 
+	
+	public Usuario getProfessor(){
+		if(this.questoes != null && !this.questoes.isEmpty()){
+			return this.questoes.get(0).getProfessor();
+		}
+		
+		return null;
+	}
+	
 	public String getNomeFormatado() {
 		String formatacao = "";
 
@@ -81,7 +86,7 @@ public class Exercicio implements Serializable {
 		TypedQuery<Exercicio> q = em
 				.createQuery(
 						"SELECT DISTINCT(e) FROM Exercicio AS e WHERE e.id IN("
-								+ "SELECT q FROM Questao AS q WHERE q.professor.id =:id) ORDER BY e.dataDeVencimento ASC",
+								+ "SELECT q FROM Questao AS q WHERE q.professor.id =:id) ORDER BY e.nome ASC",
 						Exercicio.class);
 
 		q.setParameter("id", professor.getId());
@@ -92,39 +97,11 @@ public class Exercicio implements Serializable {
 	public static List<Exercicio> findExerciciosByTeachersNameOrEmail(
 			String apelidoDoProfessorPesquisa, String emailDoProfessorPesquisa) {
 
-		// EntityManager em = Usuario.entityManager();
-		// String sql = "SELECT e.* FROM questao q "
-		// + "INNER JOIN exercicio_questoes eq ON q.id = eq.questoes "
-		// + "INNER JOIN exercicio e ON eq.exercicio = e.id "
-		// + "INNER JOIN usuario u ON q.professor = u.id "
-		// + "WHERE u.perfil = 'PROFESSOR'";
-		//
-		// Map<String, String> parameters = new HashMap<String, String>();
-		// if (emailDoProfessorPesquisa != null
-		// && !emailDoProfessorPesquisa.isEmpty()) {
-		// sql += " AND u.email LIKE :email ";
-		// parameters.put("email", "%" + emailDoProfessorPesquisa + "%");
-		// }
-		//
-		// if (apelidoDoProfessorPesquisa != null
-		// && !apelidoDoProfessorPesquisa.isEmpty()) {
-		// sql += " AND u.nick_name LIKE :apelido";
-		// parameters.put("apelido", "%" + apelidoDoProfessorPesquisa + "%");
-		// }
-		//
-		// Query q = em.createNativeQuery(sql, Exercicio.class);
-		// Set<String> entrySet = parameters.keySet();
-		// for (String chave : entrySet) {
-		// q.setParameter(chave, parameters.get(chave));
-		// }
-		//
-		// return (List<Exercicio>) q.getResultList();
-
 		EntityManager em = Usuario.entityManager();
 		TypedQuery<Exercicio> q = em
 				.createQuery(
 						"SELECT DISTINCT(e) FROM Exercicio AS e WHERE e.id IN("
-								+ "SELECT q FROM Questao AS q WHERE q.professor.nickName LIKE :nickname AND q.professor.email LIKE :email) ORDER BY e.dataDeVencimento ASC",
+								+ "SELECT q FROM Questao AS q WHERE q.professor.nickName LIKE :nickname AND q.professor.email LIKE :email) ORDER BY e.nome ASC",
 						Exercicio.class);
 
 		q.setParameter("nickname", "%" + apelidoDoProfessorPesquisa + "%");

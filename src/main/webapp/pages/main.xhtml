@@ -36,8 +36,8 @@
 								ajax="false" update="growl" />
 						</h:panelGrid>
 
-						<p:commandLink value="Esqueci minha senha"
-							action="esqueciSenha.jsf" />
+						<a href="esqueciMinhaSenha.jsf" id="linkEsqueciMinhaSenha"
+							style="font-size: 12px;">Esqueceu sua senha?</a>
 					</h:panelGrid>
 				</h:panelGrid>
 			</h:form>
@@ -60,6 +60,9 @@
 						exercícios, cadastrar turmas, e verificar o desempenho dos alunos.</h3>
 
 					<h:form>
+						<p:ajaxStatus onstart="statusDialog.show();"
+							onsuccess="statusDialog.hide();" />
+
 						<h:panelGrid>
 							<p:growl id="growlCadastroUsuario" />
 							<h:panelGrid>
@@ -111,6 +114,12 @@
 				</h:panelGrid>
 			</h:panelGrid>
 		</p:panel>
+
+		<p:dialog modal="true" resizable="false" header="Aguarde"
+			widgetVar="statusDialog" draggable="false" closable="false">
+			<h:graphicImage
+				url="https://s3-us-west-2.amazonaws.com/educservicebucket/images/carregando.gif" />
+		</p:dialog>
 	</ui:define>
 </ui:composition>
 </html>

@@ -17,11 +17,6 @@ import br.ufpb.dcx.service.UsuarioService;
 @ViewScoped
 public class LoginBean {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	@Autowired
 	private UsuarioService usuarioService;
 
@@ -29,18 +24,10 @@ public class LoginBean {
 	private String senha;
 
 	public void autenticar() {
-		 try {
-			Thread.sleep(10000);
-		} catch (InterruptedException e1) {
-			e1.printStackTrace();
-		}
-		
 		Usuario usuario = this.usuarioService.pesquisarUsuarioPorEmailOrNickNameAndSenha(login, senha);
 		if (usuario != null) {
 			EducServiceJsfUtil.adicionarUsuarioNaSessao(usuario);
 			try {
-				
-				EducServiceJsfUtil.limparCicloDeVidaDaArvore();
 				EducServiceJsfUtil.obterResponse().sendRedirect("private/home.jsf");
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -48,7 +35,6 @@ public class LoginBean {
 		} else {
 			EducServiceJsfUtil.lancarMensagemDeErro("Usuário não encontrado");
 		}
-
 	}
 	
 	public String getLogin() {

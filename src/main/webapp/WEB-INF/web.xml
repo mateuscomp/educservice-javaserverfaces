@@ -40,7 +40,24 @@
 		<filter-name>loginFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
+	
+	<filter>
+		<filter-name>alunoFilter</filter-name>
+		<filter-class>br.ufpb.dcx.jsf.filter.AlunoFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>alunoFilter</filter-name>
+		<url-pattern>/pages/private/aluno/*</url-pattern>
+	</filter-mapping>
     
+    <filter>
+		<filter-name>professorFilter</filter-name>
+		<filter-class>br.ufpb.dcx.jsf.filter.ProfessorFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>professorFilter</filter-name>
+		<url-pattern>/pages/private/professor/*</url-pattern>
+	</filter-mapping>
     
     <!-- Creates the Spring Container shared by all Servlets and Filters -->
     <listener>

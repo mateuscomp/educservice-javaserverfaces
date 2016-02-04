@@ -10,4 +10,6 @@ privileged aspect LoginBean_Roo_Serializable {
     
     declare parents: LoginBean implements Serializable;
     
+    private static final long LoginBean.serialVersionUID = 1L;
+    
 }

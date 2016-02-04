@@ -5,7 +5,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 
-<ui:composition template="../../templates/private/layout.xhtml">
+<ui:composition template="../../../templates/private/layout.xhtml">
 	<ui:define name="content">
 		<p:panel id="panel">
 			<h1>Questão de Verdadeiro ou Falso</h1>
@@ -14,9 +14,13 @@
 			<h:panelGrid>
 				<p:panel id="panelPesquisa" header="Pesquisar" toggleable="true"
 					toggleSpeed="500" widgetVar="panelPesquisaWidgetVar"
-					toggleOrientation="vertical" style="margin-bottom:20px; width: 970px" >
+					toggleOrientation="vertical"
+					style="margin-bottom:20px; width: 970px">
 
 					<h:form id="minhasQuestoesPesquisaForm">
+						<p:ajaxStatus onstart="statusDialog.show();"
+							onsuccess="statusDialog.hide();" />
+
 						<p:growl id="growlPesquisa" />
 
 						<h:panelGrid>
@@ -65,12 +69,15 @@
 					</h:form>
 				</p:panel>
 
-
 				<p:panel id="panelCadastro" header="Cadastrar" toggleable="true"
 					toggleSpeed="500" widgetVar="panelCadastroWidgetVar"
-					toggleOrientation="vertical" style="margin-bottom:20px; width: 970px">
-					<p:growl />
+					toggleOrientation="vertical"
+					style="margin-bottom:20px; width: 970px">
+
 					<h:form id="formCadastroQVF">
+						<p:ajaxStatus onstart="statusDialog.show();"
+							onsuccess="statusDialog.hide();" />
+
 						<p:growl id="growlQVF" />
 
 						<h:panelGrid cellpadding="3">
@@ -106,7 +113,8 @@
 											offIcon="ui-icon-close" />
 									</h:panelGrid>
 
-									<p:commandButton value="Adicionar alternativa" icon="ui-icon-plus"
+									<p:commandButton value="Adicionar alternativa"
+										icon="ui-icon-plus"
 										actionListener="#{questaoDeVouFBean.adicionarAlternativaQVF}"
 										process="alternativaVFInputText, alternativaCorretaDaQuestaoVFInputText"
 										update="alternativaVFInputText, alternativaCorretaDaQuestaoVFInputText, alternativasVFDataTable, growlQVF" />
@@ -156,6 +164,12 @@
 				</p:panel>
 			</h:panelGrid>
 		</p:panel>
+
+		<p:dialog modal="true" resizable="false" header="Aguarde"
+			widgetVar="statusDialog" draggable="false" closable="false">
+			<h:graphicImage
+				url="https://s3-us-west-2.amazonaws.com/educservicebucket/images/carregando.gif" />
+		</p:dialog>
 	</ui:define>
 </ui:composition>
 </html>

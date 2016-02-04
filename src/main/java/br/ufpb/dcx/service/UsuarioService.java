@@ -13,4 +13,6 @@ public interface UsuarioService {
 
 	Usuario pesquisarUsuarioPorEmailOrNickNameAndSenha(String login, String senha);
 
+	Usuario recuperarSenha(String nickname, String email) throws EducServiceException;
+
 }
