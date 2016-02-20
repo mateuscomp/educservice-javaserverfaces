@@ -24,14 +24,14 @@
 		</ui:remove>
 
 		<p:submenu label="Questões" rendered="#{sessaoBean.usuarioEhProfessor}">
-			<p:menuitem value="Questão dissertativa" url="professor/questaoDissertativa.jsf" rendered="#{sessaoBean.usuarioEhProfessor}"/>
-			<p:menuitem value="Questão múlt. escolha" url="professor/questaoDeMultiplaEscolha.jsf" rendered="#{sessaoBean.usuarioEhProfessor}"/>
-			<p:menuitem value="Questão V ou F" url="professor/questaoDeVouF.jsf" rendered="#{sessaoBean.usuarioEhProfessor}"/>
+			<p:menuitem value="Questão dissertativa" url="questaoDissertativa.jsf" rendered="#{sessaoBean.usuarioEhProfessor}"/>
+			<p:menuitem value="Questão múlt. escolha" url="questaoDeMultiplaEscolha.jsf" rendered="#{sessaoBean.usuarioEhProfessor}"/>
+			<p:menuitem value="Questão V ou F" url="questaoDeVouF.jsf" rendered="#{sessaoBean.usuarioEhProfessor}"/>
 		</p:submenu>
 
 		<p:submenu label="Exercícios">
-			<p:menuitem value="Meus exercícios" url="professor/exercicios.jsf" rendered="#{sessaoBean.usuarioEhProfessor}"/>
-			<p:menuitem value="Responder Exercícios" url="aluno/responderExercicios.jsf" rendered="#{sessaoBean.usuarioEhAluno}"/>
+			<p:menuitem value="Meus exercícios" url="exercicios.jsf" rendered="#{sessaoBean.usuarioEhProfessor}"/>
+			<p:menuitem value="Responder Exercícios" url="responderExercicios.jsf" rendered="#{sessaoBean.usuarioEhAluno}"/>
 		</p:submenu>
 	</p:menubar>
 

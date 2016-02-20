@@ -9,6 +9,7 @@ import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
 import br.ufpb.dcx.jsf.util.EducServiceJsfUtil;
+import br.ufpb.dcx.model.PerfilEnum;
 import br.ufpb.dcx.model.Usuario;
 import br.ufpb.dcx.service.UsuarioService;
 
@@ -28,7 +29,13 @@ public class LoginBean {
 		if (usuario != null) {
 			EducServiceJsfUtil.adicionarUsuarioNaSessao(usuario);
 			try {
-				EducServiceJsfUtil.obterResponse().sendRedirect("private/home.jsf");
+				String urlResponse = "private/";
+				if(usuario.getPerfil().equals(PerfilEnum.ALUNO)){
+					urlResponse += "aluno/home.jsf";
+				} else if(usuario.getPerfil().equals(PerfilEnum.PROFESSOR)){
+					urlResponse += "professor/home.jsf";
+				}
+				EducServiceJsfUtil.obterResponse().sendRedirect(urlResponse);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
